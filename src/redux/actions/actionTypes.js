@@ -1,0 +1,13 @@
+// User Login
+export const LOG_IN_PENDING     = 'LOG_IN_PENDING';
+export const LOG_IN_FAILURE     = 'LOG_IN_FAILURE';
+export const LOG_IN_SUCCESS     = 'LOG_IN_SUCCESS';
+export const LOG_OUT_SUCCESS    = 'LOG_OUT_SUCCESS';
+
+// Profile Object
+export const SET_PROFILE    = 'SET_PROFILE';
+export const UNSET_PROFILE  = 'UNSET_PROFILE';
+export const SET_USER_PROPS = 'SET_USER_PROPS';
+
+// Utils
+export const HANDLE_LOADING = 'HANDLE_LOADING';
