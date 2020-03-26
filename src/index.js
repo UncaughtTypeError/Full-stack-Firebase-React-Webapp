@@ -3,14 +3,13 @@ import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 // Components
 import Loading from './components/presentational/Loading';
+import App from './components/containers/App';
 // Redux
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from './redux/store.js';
 // Firebase
 import Firebase, { FirebaseContext } from './config/firebase';
-// Containers
-import App from './components/containers/App';
 
 const rootElement = document.getElementById('root');
 
