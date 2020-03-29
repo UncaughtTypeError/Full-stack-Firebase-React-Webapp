@@ -30,7 +30,7 @@ const useFirebaseDataApi = (firebaseObj) => {
                 if(!didCancel) {
                     data.on('value', (snapshot) => {
                         if(snapshot) {
-                            setUserData( compileUserArray({ snapshot, state_userId }) );
+                            setUserData( compileUserArray({ snapshot, userId: state_userId }) );
                         }
                     });
                 }

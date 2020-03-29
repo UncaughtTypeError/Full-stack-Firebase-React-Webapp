@@ -10,9 +10,10 @@ const useStyles = makeStyles(theme => ({
     listItem: {
         top: 'auto',
         bottom: 0,
+        padding: 0,
     },
     avatar: {
-        marginLeft: 10,
+        marginRight: 10,
     }
 }));
 
@@ -22,48 +23,43 @@ const PrimaryContent = (props) => {
 
     return (
         <React.Fragment>
-            Welcome {name}
+            {name}
         </React.Fragment>
     );
 }
 
 const SecondaryContent = (props) => {
 
-    const { laptopsNum, monitorsNum, isUser } = props;
+    const { email } = props;
     
     return (
         <React.Fragment>
-            { isUser && (laptopsNum  > 0 || monitorsNum > 0) ? (
-                <div>You have <strong>{laptopsNum} Laptop/s</strong> and <strong>{monitorsNum} Monitor/s</strong> assigned to your account.</div>
-            ) : (
-                <div>You have no devices assigned to your account.</div>
-            )}
+            <a href={`mailto:${email}`}>{email}</a>
         </React.Fragment>
     );
 }
 
-const UserGreeting = (props) => {
+const ListItemProfile = (props) => {
 
     const   classes = useStyles();
 
-    const   { imageUrl, name, role, laptopsNum, monitorsNum, isUser } = props,
-            typographyProps = { color: 'inherit', align: 'right', component: 'div' },
-            secondaryContentProps = { laptopsNum, monitorsNum, isUser }
+    const   { profile, role } = props,
+            typographyProps = { component: 'div' };
 
     return (
         <ListItem data-role={role} className={classes.listItem} component="div">
+            <ListItemAvatar>
+                <Avatar alt={profile.name} src={profile.imageUrl} className={classes.avatar} />
+            </ListItemAvatar>
             <ListItemText 
-                primary={<PrimaryContent name={name} />} 
-                secondary={<SecondaryContent {...secondaryContentProps} />} 
+                primary={<PrimaryContent name={profile.name} />} 
+                secondary={<SecondaryContent email={profile.email} />} 
                 primaryTypographyProps={typographyProps}
                 secondaryTypographyProps={typographyProps}
             />
-            <ListItemAvatar>
-                <Avatar alt={name} src={imageUrl} className={classes.avatar} />
-            </ListItemAvatar>
         </ListItem>
     );
 
 }
 
-export default UserGreeting;
+export default ListItemProfile;

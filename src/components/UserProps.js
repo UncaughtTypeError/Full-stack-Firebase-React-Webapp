@@ -9,7 +9,7 @@ import useFirebaseDataApi from '../utils/hooks/useFirebaseDataApi';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 // Actions
-import { userAdditionalProps } from '../redux/actions/actions';
+import { userAdditionalProps, userDevicesProps } from '../redux/actions/actions';
 
 const UserProps = (props) => {
 
@@ -19,7 +19,9 @@ const UserProps = (props) => {
     
     const   state_loggedIn      = useSelector(state => state.userLogin.loggedIn),
             state_user          = useSelector(state => state.profileObject),
+            state_devices       = useSelector(state => state.devicesObject),
             dispatch            = useDispatch(),
+            setDevicesProps     = (props) => dispatch(userDevicesProps(props)),
             setAdditionalProps  = (props) => dispatch(userAdditionalProps(props));
 
     const   [isUser, setIsUser]         = useState(false),
@@ -41,11 +43,10 @@ const UserProps = (props) => {
                     userExists: true,
                     dataEdit: false,
                 });
-                setAdditionalProps(userProps);
                 setIsUser(true);
                 setDevicesNum({ 
-                    laptops: user.devices.laptops.length, 
-                    monitors: user.devices.monitors.length 
+                    laptopsNum: user.devicesNum.laptopsNum, 
+                    monitorsNum: user.devicesNum.monitorsNum 
                 });
             } else {
                 setUserProps({ 
@@ -59,39 +60,44 @@ const UserProps = (props) => {
 
     }, [userData]);
 
+    useEffect(() => {
+
+        if(isUser) {
+            setAdditionalProps(userProps);
+            setDevicesProps(devicesNum);
+        }
+
+    },[userProps, devicesNum]);
+
     return (
-        <div>
+        <React.Fragment>
             {
                 isLoading ? (
-                    <Loading />
+                    <Loading size={20} color="inherit" display="inline" />
                     ) : state_loggedIn && (
                         isError ? (
                             <Error />
                         ) : (
                             isUser ? (
-                                <div>
-                                    <UserGreeting 
-                                        imageUrl={state_user.imageUrl} 
-                                        name={state_user.name} 
-                                        role={state_user.role}
-                                        laptopsNum={devicesNum.laptops}
-                                        monitorsNum={devicesNum.monitors}
-                                        isUser={isUser}
-                                    />
-                                </div>
+                                <UserGreeting 
+                                    imageUrl={state_user.imageUrl} 
+                                    name={state_user.name} 
+                                    role={state_user.role}
+                                    laptopsNum={state_devices.laptopsNum}
+                                    monitorsNum={state_devices.monitorsNum}
+                                    isUser={isUser}
+                                />
                             ) : (
-                                <div>
-                                    <UserGreeting 
-                                        imageUrl={state_user.imageUrl} 
-                                        name={state_user.name} 
-                                        isUser={isUser}
-                                    />
-                                </div>
+                                <UserGreeting 
+                                    imageUrl={state_user.imageUrl} 
+                                    name={state_user.name} 
+                                    isUser={isUser}
+                                />
                             )
                         )
                     )
             }
-        </div>
+        </React.Fragment>
     );
 }
 

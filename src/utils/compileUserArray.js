@@ -1,10 +1,12 @@
 const compileUserArray = (props) => {
+
     let { snapshot, userId = null } = props,
         dbItems = snapshot.val();
 
     let userObject = [],
         laptopsObject = {},
         monitorsObject = {},
+        devicesNumObject = {},
 
         userArray = [],
         laptopsArray = [],
@@ -29,6 +31,10 @@ const compileUserArray = (props) => {
             devices: {
                 laptops: [],
                 monitors: []
+            },
+            devicesNum: {
+                laptopsNum: 0,
+                monitorsNum: 0
             }
         });
 
@@ -43,6 +49,7 @@ const compileUserArray = (props) => {
                     serialNo:   laptopsObject[key].serialNo,
                     takenHome:  laptopsObject[key].takenHome
                 });
+                userArray[index].devicesNum.laptopsNum++
             }
 
             monitorsObject = key.devices.monitors || {};
@@ -54,6 +61,7 @@ const compileUserArray = (props) => {
                     serialNo:   monitorsObject[key].serialNo,
                     screenSize: monitorsObject[key].screenSize
                 });
+                userArray[index].devicesNum.monitorsNum++
             }
 
         }

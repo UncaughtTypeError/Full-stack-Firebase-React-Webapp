@@ -11,6 +11,8 @@ import {
     googleLoginFailure,
     googleLogoutSuccess
 } from '../redux/actions/actions';
+// Theme
+import Button from '@material-ui/core/Button';
 
 const LoginGoogle = () => {
     
@@ -27,16 +29,36 @@ const LoginGoogle = () => {
                 <GoogleLogout
                     clientId={CLIENT_ID}
                     buttonText="Logout"
+                    icon={true}
                     onLogoutSuccess={logoutSuccess}
+                    render={(renderProps) => (
+                        <Button 
+                            variant="contained" 
+                            onClick={renderProps.onClick} 
+                            disabled={renderProps.disabled}
+                        >
+                            Logout
+                        </Button>
+                    )}
                 />
             ) : (
                 <GoogleLogin
                     clientId={CLIENT_ID}
                     buttonText="Login"
+                    icon={true}
                     onRequest={loginRequest}
                     onSuccess={loginSuccess}
                     onFailure={loginFailure}
                     cookiePolicy={'single_host_origin'}
+                    render={(renderProps) => (
+                        <Button 
+                            variant="outlined" 
+                            onClick={renderProps.onClick} 
+                            disabled={renderProps.disabled}
+                        >
+                            Login with Google
+                        </Button>
+                    )}
                 />
             )}
         </React.Fragment>

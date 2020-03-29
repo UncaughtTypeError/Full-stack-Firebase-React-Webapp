@@ -9,5 +9,8 @@ export const SET_PROFILE    = 'SET_PROFILE';
 export const UNSET_PROFILE  = 'UNSET_PROFILE';
 export const SET_USER_PROPS = 'SET_USER_PROPS';
 
+// Devices Object
+export const SET_DEVICE_PROPS = 'SET_DEVICE_PROPS';
+
 // Utils
 export const HANDLE_LOADING = 'HANDLE_LOADING';

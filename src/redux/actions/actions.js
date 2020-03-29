@@ -6,6 +6,7 @@ import {
     SET_PROFILE,
     SET_USER_PROPS,
     UNSET_PROFILE,
+    SET_DEVICE_PROPS,
     HANDLE_LOADING
 } from './actionTypes';
 
@@ -35,6 +36,12 @@ export const googleLogoutSuccess = () => dispatch => {
 export const userAdditionalProps = (props) => dispatch => {
     console.log('User Props',{props});
     dispatch({ type: SET_USER_PROPS, payload: props });
+}
+
+// Devices Object
+export const userDevicesProps = (props) => dispatch => {
+    console.log('Device Props',{props});
+    dispatch({ type: SET_DEVICE_PROPS, payload: props });
 }
 
 // Utils

@@ -27,6 +27,9 @@ const useStyles = makeStyles(theme => ({
         right: theme.spacing(2),
         zIndex: 9999,
     },
+    toolbarAnchor: {
+        minHeight: 75,
+    },
     typography: {
         fontWeight: 300,
     }
@@ -104,7 +107,7 @@ const Header = (props) => {
                     </Toolbar>
                 </AppBar>
             </HideOnScroll>
-            <Toolbar id="back-to-top-anchor" />
+            <Toolbar id="back-to-top-anchor" className={classes.toolbarAnchor} />
             <ScrollTop {...props}>
                 <Fab color="secondary" size="small" aria-label="scroll back to top">
                     <KeyboardArrowUpIcon />

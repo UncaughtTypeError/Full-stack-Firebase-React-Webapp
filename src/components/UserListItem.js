@@ -1,167 +1,129 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // Components
 import withFirebase from './containers/withFirebase';
-import Input from './presentational/Input';
+import ListItemProfile from './presentational/ListItemProfile';
+import DevicesTable from './presentational/DevicesTable';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 // Actions
 import { userAdditionalProps } from '../redux/actions/actions';
+// Theme
+import { makeStyles } from '@material-ui/core/styles';
+import ListItem from '@material-ui/core/ListItem';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import Badge from '@material-ui/core/Badge';
+import UpdateIcon from '@material-ui/icons/Update';
+import ClearIcon from '@material-ui/icons/Clear';
+import ComputerIcon from '@material-ui/icons/Computer';
+import DesktopWindowsIcon from '@material-ui/icons/DesktopWindows';
+import Divider from '@material-ui/core/Divider';
+
+const useStyles = makeStyles(theme => ({
+    icon: {
+        color: theme.palette.action.disabled,
+        verticalAlign: 'bottom',
+        marginRight: 5,
+    },
+    badge: {
+        marginRight: theme.spacing(2),
+    }
+}));
 
 const UserListItem = (props) => {
 
-    const   { userData, firebase } = props;
+    const { user } = props;
+
+    const classes = useStyles();
     
     const   state_user          = useSelector(state => state.profileObject),
             dispatch            = useDispatch(),
             setAdditionalProps  = (props) => dispatch(userAdditionalProps(props));
 
-    const   [deviceData, setDeviceData] = useState({}),
-            [userEdit, setUserEdit] = useState(null);
-
-    const onRemove = (userId, deviceId, deviceType) => {
-        const   db      = firebase.database(),
-                ref     = db.ref('users'),
-                child   = ref.child(userId).child('devices').child(deviceType).child(deviceId);
-
-        child.remove();
-    };
-
-    const onUpdate = (userId, deviceId, deviceType) => {
-        const   db      = firebase.database(),
-                ref     = db.ref('users'),
-                child   = ref.child(userId).child('devices').child(deviceType).child(deviceId);
-
-        let updateData = deviceData[deviceId]; 
-
-        child.once('value', (snapshot) => {
-            let existingData = snapshot.val();
-            child.update({ ...existingData, ...updateData });
-        });
-    };
-
-    const onEdit = (key, value, deviceId) => {
-
-        let editData = {};
-        editData[deviceId] = { ...deviceData[deviceId], [key]: value };
-
-        setDeviceData({...deviceData, ...editData});
-    };
+    const   [userEdit, setUserEdit] = useState(null),
+            [devicesNum, setDevicesNum] = useState({});
 
     const onUserEdit = (boolean, userId = null) => {
         setUserEdit(userId);
         setAdditionalProps({ dataEdit: boolean });
     }
 
+    useEffect(() => {
+
+        setDevicesNum({ 
+            laptopsNum: user.devices.laptops.length || 0, 
+            monitorsNum: user.devices.monitors.length || 0
+        });
+
+    }, [user]);
+
     return (
         <React.Fragment>
-            {userData.map(user => (
-                <li className='userList__user' key={user.googleId} id={user.googleId}>
-                    <div className='user__profile'>
-                        <div><img src={user.profile.imageUrl} alt={user.profile.name} /></div>
-                        <div>{user.profile.name}</div>
-                        <div><a href={`mailto:${user.profile.email}`}>{user.profile.email}</a></div>
-                    </div>
+            <ListItem key={user.googleId} id={user.googleId}>
+                <Box component="div" style={{ width: '100%' }}>
+                    <Box display="flex" alignItems="center">
+                        <Box component="div" flexGrow={1}>
+                            <ListItemProfile profile={user.profile} role={state_user.role} />
+                        </Box>
+                        <Box component="div">
+                            {(devicesNum.laptopsNum > 0) && (
+                                <Badge className={classes.badge} badgeContent={devicesNum.laptopsNum} color="secondary">
+                                    <ComputerIcon className={classes.icon} />
+                                </Badge>
+                            )}
+                            {(devicesNum.monitorsNum > 0) && (
+                                <Badge className={classes.badge} badgeContent={devicesNum.monitorsNum} color="secondary">
+                                    <DesktopWindowsIcon className={classes.icon} />
+                                </Badge>
+                            )}
+                            {(user.devices.laptops.length > 0 || user.devices.monitors.length > 0) && (
+                                // can the current user edit?
+                                user.googleId === state_user.googleId || state_user.role === 'admin') && (
+                                    // is the current user editing?
+                                    state_user.dataEdit && (user.googleId === userEdit) ? (
+                                        <Button variant="contained" onClick={() => onUserEdit(false)}>
+                                            <ClearIcon fontSize="small" className={classes.icon} /> Cancel
+                                        </Button>
+                                    ) : (
+                                        <Button variant="outlined" onClick={() => onUserEdit(true, user.googleId)}>
+                                            <UpdateIcon fontSize="small" className={classes.icon} /> Update
+                                        </Button>
+                                    )
+                            )}
+                        </Box>
+                    </Box>
                     <div className='devices'>
                         <div className='devices_laptops'>
-                            <h4>Laptops</h4>
                             {user.devices.laptops.length ? (
-                                <ul className='devices__laptops__list'>
-                                    {user.devices.laptops.map(laptop => (
-                                        <li key={laptop.id} id={laptop.id}>
-                                            {(  state_user.dataEdit && 
-                                                (user.googleId === userEdit) && 
-                                                (user.googleId === state_user.googleId || state_user.role === 'admin') ) ? (
-                                                <div>
-                                                    <Input 
-                                                        defaultValue={laptop.makeModel} 
-                                                        dataKey='makeModel' 
-                                                        onBlur={e => onEdit(e.target.dataset.key, e.target.value, laptop.id)} 
-                                                    />
-                                                    <Input 
-                                                        defaultValue={laptop.serialNo} 
-                                                        dataKey='serialNo' 
-                                                        onBlur={e => onEdit(e.target.dataset.key, e.target.value, laptop.id)} 
-                                                    />
-                                                    <Input 
-                                                        defaultValue={laptop.takenHome} 
-                                                        dataKey='takenHome' 
-                                                        type='checkbox' 
-                                                        defaultChecked={laptop.takenHome ? 'checked' : ''} 
-                                                        onChange={e => onEdit(e.target.dataset.key, e.target.checked ? true : false, laptop.id)} 
-                                                    />
-                                                    <button onClick={() => onUpdate(user.googleId, laptop.id, 'laptops')}>Update</button>
-                                                    <button onClick={() => onRemove(user.googleId, laptop.id, 'laptops')}>Remove</button>
-                                                </div>
-                                            ) : (
-                                                <div>
-                                                    <strong>{laptop.makeModel}</strong> <span>{laptop.serialNo}</span> <span>{laptop.takenHome ? 'Yes' : 'No'}</span>
-                                                </div>
-                                            )}
-                                        </li>
-                                    ))}
-                                </ul>
+                                <DevicesTable 
+                                    devices={user.devices.laptops} 
+                                    deviceType='laptops'
+                                    state_user={state_user} 
+                                    user_edit={userEdit} 
+                                    user_googleId={user.googleId} 
+                                />
                             ) : (
-                                <div>No Laptops found...</div>
+                                <Typography component="div">No Laptops found...</Typography>
                             )}
                         </div>
                         <div className='devices_monitors'>
-                            <h4>Monitors</h4>
                             {user.devices.monitors.length ? (
-                                <ul className='devices__monitors__list'>
-                                    {user.devices.monitors.map(monitor => (
-                                        <li key={monitor.id} id={monitor.id}>
-                                            {(  state_user.dataEdit && 
-                                                (user.googleId === userEdit) && 
-                                                (user.googleId === state_user.googleId || state_user.role === 'admin') ) ? (
-                                                <div>
-                                                    <Input 
-                                                        defaultValue={monitor.makeModel} 
-                                                        dataKey='makeModel' 
-                                                        onBlur={e => onEdit(e.target.dataset.key, e.target.value, monitor.id)} 
-                                                    />
-                                                    <Input 
-                                                        defaultValue={monitor.serialNo} 
-                                                        dataKey='serialNo' 
-                                                        onBlur={e => onEdit(e.target.dataset.key, e.target.value, monitor.id)} 
-                                                    />
-                                                    <Input 
-                                                        defaultValue={monitor.screenSize} 
-                                                        dataKey='screenSize' 
-                                                        onBlur={e => onEdit(e.target.dataset.key, e.target.value, monitor.id)}
-                                                    />
-                                                    <button onClick={() => onUpdate(user.googleId, monitor.id, 'monitors')}>Update</button>
-                                                    <button onClick={() => onRemove(user.googleId, monitor.id, 'monitors')}>Remove</button>
-                                                </div>
-                                            ) : (
-                                                <div>
-                                                    <strong>{monitor.makeModel}</strong> <span>{monitor.serialNo}</span> <span>{monitor.screenSize}</span>
-                                                </div>
-                                            )}
-                                        </li>
-                                    ))}
-                                </ul>
+                                <DevicesTable 
+                                    devices={user.devices.monitors} 
+                                    deviceType='monitors'
+                                    state_user={state_user} 
+                                    user_edit={userEdit} 
+                                    user_googleId={user.googleId} 
+                                />
                             ) : (
-                                <div>No Monitors found...</div>
-                            )}
-                        </div>
-                        <div>
-                            {(user.devices.laptops.length > 0 || user.devices.monitors.length > 0) && (
-
-                                // can the current user edit?
-                                user.googleId === state_user.googleId || state_user.role === 'admin') && (
-
-                                    // is the current user editing?
-                                    state_user.dataEdit && (user.googleId === userEdit) ? (
-                                        <button onClick={() => onUserEdit(false)}>Cancel</button>
-                                    ) : (
-                                        <button onClick={() => onUserEdit(true, user.googleId)}>Update</button>
-                                    )
-                                    
+                                <Typography component="div">No Monitors found...</Typography>
                             )}
                         </div>
                     </div>
-                </li>
-            ))}
+                </Box>
+            </ListItem>
+            <Divider component="li" />
         </React.Fragment>
     );
 
