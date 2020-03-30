@@ -41,7 +41,7 @@ const UserProps = (props) => {
                 setUserProps({ 
                     role: user.role, 
                     userExists: true,
-                    dataEdit: false,
+                    dataEdit: state_user.dataEdit ? true : false,
                 });
                 setIsUser(true);
                 setDevicesNum({ 
