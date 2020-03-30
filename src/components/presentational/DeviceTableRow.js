@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import withFirebase from '../containers/withFirebase';
 import InputTextField from './InputTextField';
 import InputCheckbox from './InputCheckbox';
+import SnackbarAlert from './SnackbarAlert';
 // Utils
 import validateFields from '../../utils/validateFields';
 // Theme
@@ -39,7 +40,8 @@ const DeviceTableRow = (props) => {
     const   [deviceData, setDeviceData] = useState({}),
             [isDisabled, setIsDisabled] = useState(false),
             [inputChecked, setInputChecked] = useState(device.takenHome),
-            [validationData, setValidationData] = useState({});
+            [validationData, setValidationData] = useState({}),
+            [isAlert, setIsAlert] = useState({ alert: false, severity: '', message: '' });
 
     useEffect(() => {
 
@@ -66,7 +68,13 @@ const DeviceTableRow = (props) => {
 
         child.once('value', (snapshot) => {
             let existingData = snapshot.val();
-            child.update({ ...existingData, ...updateData });
+            child.update({ ...existingData, ...updateData }).then(function(){
+                    console.log('Update success');
+                    setIsAlert({ alert: true, severity: 'success', message: 'Update successful!' });
+                }).catch(function(error) {
+                    console.error('Update could not be saved.' + error);
+                    setIsAlert({ alert: true, severity: 'error', message: 'Database Error. Update failed...' });
+                });
         });
     };
 
@@ -92,6 +100,9 @@ const DeviceTableRow = (props) => {
 
     return (
         <TableRow key={device.id} id={device.id}>
+            {(isAlert.alert && (
+                <SnackbarAlert severity={isAlert.severity} message={isAlert.message} open={true} />
+            ))}
             {( state_user.dataEdit && 
                 (user_googleId === user_edit) && 
                 (user_googleId === state_user.googleId || state_user.role === 'admin') ) ? (
