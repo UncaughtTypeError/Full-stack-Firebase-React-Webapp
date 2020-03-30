@@ -38,15 +38,16 @@ const DeviceTableRow = (props) => {
 
     const   [deviceData, setDeviceData] = useState({}),
             [isDisabled, setIsDisabled] = useState(false),
-            [inputChecked, setInputChecked] = useState(device.takenHome);
+            [inputChecked, setInputChecked] = useState(device.takenHome),
+            [validationData, setValidationData] = useState({});
 
     useEffect(() => {
 
-        if(deviceData) {
-            setIsDisabled(validateFields(deviceType, deviceData, 'update'));
+        if(validationData) {
+            setIsDisabled(validateFields(validationData, 'update'));
         }
 
-    },[deviceData]);
+    },[validationData]);
 
     const onRemove = (userId, deviceId, deviceType) => {
         const   db      = firebase.database(),
@@ -69,12 +70,21 @@ const DeviceTableRow = (props) => {
         });
     };
 
-    const onEdit = (key, value,deviceId, type) => {
-        
+    const onEdit = (key, value, deviceId, fieldId, required, type) => {
+
         let editData = {};
         editData[deviceId] = { ...deviceData[deviceId], [key]: value };
 
         setDeviceData({...deviceData, ...editData});
+
+        if(required) {
+            let fieldValidationData = {},
+                invalidity = (value.length || value === true) ? false : true;
+            fieldValidationData = { ...validationData, [fieldId]: invalidity };
+
+            setValidationData({...validationData, ...fieldValidationData});
+        }
+
         if(type === 'checkbox') {
             setInputChecked(value);
         }
@@ -91,8 +101,17 @@ const DeviceTableRow = (props) => {
                             defaultValue={device.makeModel} 
                             dataKey='makeModel' 
                             dataDeviceID={device.id}
+                            dataFieldID={device.id+1}
+                            error={validationData[device.id+1]}
                             label='Make / Model'
-                            onBlur={e => onEdit(e.target.dataset.key, e.target.value, e.target.dataset.deviceid)} 
+                            onBlur={e => onEdit(
+                                e.target.dataset.key, 
+                                e.target.value, 
+                                e.target.dataset.deviceid, 
+                                e.target.dataset.fieldid, 
+                                e.target.required
+                            )} 
+                            required={true}
                         />
                     </TableCell>
                     <TableCell align="right">
@@ -100,8 +119,17 @@ const DeviceTableRow = (props) => {
                             defaultValue={device.serialNo} 
                             dataKey='serialNo' 
                             dataDeviceID={device.id}
+                            dataFieldID={device.id+2}
+                            error={validationData[device.id+2]}
                             label='Serial No.'
-                            onBlur={e => onEdit(e.target.dataset.key, e.target.value, e.target.dataset.deviceid)} 
+                            onBlur={e => onEdit(
+                                e.target.dataset.key, 
+                                e.target.value, 
+                                e.target.dataset.deviceid, 
+                                e.target.dataset.fieldid, 
+                                e.target.required
+                            )} 
+                            required={true}
                         />
                     </TableCell>
                     {deviceType === 'laptops' && (
@@ -110,9 +138,19 @@ const DeviceTableRow = (props) => {
                                 defaultValue={device.takenHome} 
                                 dataKey='takenHome' 
                                 dataDeviceID={device.id}
+                                dataFieldID={device.id+3}
+                                error={validationData[device.id+3]}
                                 checked={inputChecked}
                                 type='checkbox'
-                                onChange={e => onEdit(e.target.dataset.key, e.target.checked ? true : false, e.target.dataset.deviceid, e.target.type)} 
+                                onChange={e => onEdit(
+                                    e.target.dataset.key, 
+                                    e.target.checked ? true : false, 
+                                    e.target.dataset.deviceid, 
+                                    e.target.dataset.fieldid, 
+                                    e.target.required,
+                                    e.target.type
+                                )} 
+                                required={false}
                             />
                         </TableCell>
                     )}
@@ -122,8 +160,17 @@ const DeviceTableRow = (props) => {
                                 defaultValue={device.screenSize} 
                                 dataKey='screenSize' 
                                 dataDeviceID={device.id}
+                                dataFieldID={device.id+4}
+                                error={validationData[device.id+4]}
                                 label='Screen Size'
-                                onBlur={e => onEdit(e.target.dataset.key, e.target.value, e.target.dataset.deviceid)}
+                                onBlur={e => onEdit(
+                                    e.target.dataset.key, 
+                                    e.target.value, 
+                                    e.target.dataset.deviceid, 
+                                    e.target.dataset.fieldid, 
+                                    e.target.required
+                                )}
+                                required={true}
                             />
                         </TableCell>
                     )}

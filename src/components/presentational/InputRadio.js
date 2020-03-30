@@ -14,9 +14,12 @@ const InputRadio = (props) => {
                     onChange=       {props.onChange} 
                     onBlur=         {props.onBlur}
                     checked=        {props.checked} 
+                    error=          {props.error ? true : undefined}
+                    required=       {props.required}
                     inputProps=     {{ 
                         ['data-key']:       props.dataKey, 
                         ['data-deviceid']:  props.dataDeviceID, 
+                        ['data-fieldid']:   props.dataFieldID, 
                         value:              props.value
                     }}
                 />

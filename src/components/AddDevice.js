@@ -79,6 +79,7 @@ const AddItem = (props) => {
 
     const   [deviceData, setDeviceData] = useState({ laptops: false, monitors: false }),
             [deviceType, setDeviceType] = useState(null),
+            [validationData, setValidationData] = useState({}),
             [addDevice, setAddDevice] = useState({ laptops: false, monitors: false }),
             [isDisabled, setIsDisabled] = useState(true),
             [employeeAssignment, setEmployeeAssignment] = useState(false),
@@ -92,11 +93,16 @@ const AddItem = (props) => {
 
     useEffect(() => {
 
-        if(deviceType) {
-            setIsDisabled(validateFields(deviceType, deviceData, 'add'));
+        if(
+            (deviceType === 'laptops' && Object.entries(validationData).length >= 2) ||
+            (deviceType === 'monitors' && Object.entries(validationData).length >= 3)
+            ) {
+            if(validationData && deviceType) {
+                setIsDisabled(validateFields(validationData, 'add'));
+            }
         }
 
-    },[deviceData]);
+    },[validationData]);
 
     const onEmployeeAssignment = (checkValue) => {
         setEmployeeAssignment(checkValue);
@@ -112,8 +118,9 @@ const AddItem = (props) => {
     const onDeviceSelection = (target,e) => {
         setDeviceType(target);
         setAddDevice({ [target]:true });
-        setIsDisabled(true);
         setDeviceData({ laptops: false, monitors: false });
+        setValidationData({});
+        setIsDisabled(true);
     }
 
     const onAdd = () => {
@@ -141,11 +148,19 @@ const AddItem = (props) => {
         setIsDisabled(true);
     }
 
-    const onEdit = (key, value) => {
+    const onEdit = (key, value, fieldId, required) => {
         let editData = {};
         editData[deviceType] = { ...deviceData[deviceType], [key]: value };
 
         setDeviceData({...deviceData, ...editData});
+
+        if(required) {
+            let fieldValidationData = {},
+                invalidity = (value.length || value === true) ? false : true;
+            fieldValidationData = { ...validationData, [fieldId]: invalidity };
+
+            setValidationData({...validationData, ...fieldValidationData});
+        }
     };
 
     return (
@@ -184,9 +199,17 @@ const AddItem = (props) => {
                                     placeholder='Make / Model'
                                     id='laptop_makeModel'
                                     dataKey='makeModel'
-                                    onBlur={e => onEdit(e.target.dataset.key, e.target.value)}
+                                    dataFieldID={`laptops_makeModel${1}`}
+                                    error={validationData[`laptops_makeModel${1}`]}
+                                    onBlur={e => onEdit(
+                                        e.target.dataset.key, 
+                                        e.target.value, 
+                                        e.target.dataset.fieldid, 
+                                        e.target.required
+                                    )}
                                     label="Make / Model"
                                     htmlFor="laptop_makeModel"
+                                    required={true}
                                 />
                             </Box>
                             <Box flexGrow={1}>
@@ -194,9 +217,17 @@ const AddItem = (props) => {
                                     placeholder='Serial No.'
                                     id='laptop_serialNo'
                                     dataKey='serialNo'
-                                    onBlur={e => onEdit(e.target.dataset.key, e.target.value)}
+                                    dataFieldID={`laptops_makeModel${2}`}
+                                    error={validationData[`laptops_makeModel${2}`]}
+                                    onBlur={e => onEdit(
+                                        e.target.dataset.key, 
+                                        e.target.value, 
+                                        e.target.dataset.fieldid, 
+                                        e.target.required
+                                    )}
                                     label="Serial No."
                                     htmlFor="laptop_serialNo"
+                                    required={true}
                                 />
                             </Box>
                             <Box>
@@ -204,10 +235,18 @@ const AddItem = (props) => {
                                     placeholder='Taken home?'
                                     id='laptop_takenHome'
                                     dataKey='takenHome'
-                                    onChange={e => onEdit(e.target.dataset.key, e.target.checked)}
+                                    dataFieldID={`laptops_makeModel${3}`}
+                                    error={validationData[`laptops_makeModel${3}`]}
+                                    onChange={e => onEdit(
+                                        e.target.dataset.key, 
+                                        e.target.checked, 
+                                        e.target.dataset.fieldid, 
+                                        e.target.required
+                                    )}
                                     label="Taken home?"
                                     htmlFor="laptop_takenHome"
                                     labelPlacement="start"
+                                    required={false}
                                 />
                             </Box>
                         </Box>
@@ -221,9 +260,17 @@ const AddItem = (props) => {
                                     placeholder='Make / Model'
                                     id='monitor_makeModel'
                                     dataKey='makeModel'
-                                    onBlur={e => onEdit(e.target.dataset.key, e.target.value)}
+                                    dataFieldID={`monitors_makeModel${1}`}
+                                    error={validationData[`monitors_makeModel${1}`]}
+                                    onBlur={e => onEdit(
+                                        e.target.dataset.key, 
+                                        e.target.value, 
+                                        e.target.dataset.fieldid, 
+                                        e.target.required
+                                    )}
                                     label="Make / Model"
                                     htmlFor="monitor_makeModel"
+                                    required={true}
                                 />
                             </Box>
                             <Box flexGrow={1}>
@@ -231,9 +278,17 @@ const AddItem = (props) => {
                                     placeholder='Serial No.'
                                     id='monitor_serialNo'
                                     dataKey='serialNo'
-                                    onBlur={e => onEdit(e.target.dataset.key, e.target.value)}
+                                    dataFieldID={`monitors_makeModel${2}`}
+                                    error={validationData[`monitors_makeModel${2}`]}
+                                    onBlur={e => onEdit(
+                                        e.target.dataset.key, 
+                                        e.target.value, 
+                                        e.target.dataset.fieldid, 
+                                        e.target.required
+                                    )}
                                     label="Serial No."
                                     htmlFor="monitor_serialNo"
+                                    required={true}
                                 />
                             </Box>
                             <Box flexGrow={1}>
@@ -241,9 +296,17 @@ const AddItem = (props) => {
                                     placeholder='Screen Size'
                                     id='monitor_screenSize'
                                     dataKey='screenSize'
-                                    onBlur={e => onEdit(e.target.dataset.key, e.target.value)}
+                                    dataFieldID={`monitors_makeModel${3}`}
+                                    error={validationData[`monitors_makeModel${3}`]}
+                                    onBlur={e => onEdit(
+                                        e.target.dataset.key, 
+                                        e.target.value, 
+                                        e.target.dataset.fieldid, 
+                                        e.target.required
+                                    )}
                                     label="Screen Size"
                                     htmlFor="monitor_screenSize"
+                                    required={true}
                                 />
                             </Box>
                         </Box>
