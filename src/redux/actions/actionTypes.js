@@ -17,3 +17,6 @@ export const HANDLE_LOADING = 'HANDLE_LOADING';
 
 // Alert Feedback
 export const HANDLE_FEEDBACK = 'HANDLE_FEEDBACK';
+
+// Data Display
+export const HANDLE_DISPLAY = 'HANDLE_DISPLAY';

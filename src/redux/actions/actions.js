@@ -8,7 +8,8 @@ import {
     UNSET_PROFILE,
     SET_DEVICE_PROPS,
     HANDLE_LOADING,
-    HANDLE_FEEDBACK
+    HANDLE_FEEDBACK,
+    HANDLE_DISPLAY
 } from './actionTypes';
 
 // User Login & Profile Object
@@ -55,4 +56,10 @@ export const handleLoading = (boolean) => dispatch => {
 export const alertProps = (props) => dispatch => {
     console.log('ACTION: Alert',{props});
     dispatch({ type: HANDLE_FEEDBACK, payload: props });
+}
+
+// Data Display
+export const dataDisplayProps = (props) => dispatch => {
+    console.log('ACTION: Data Display Props',{props});
+    dispatch({ type: HANDLE_DISPLAY, payload: props });
 }
