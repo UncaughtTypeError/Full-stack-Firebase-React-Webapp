@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 // Components
 import withFirebase from './containers/withFirebase';
+import UserListHeader from './containers/UserListHeader';
 import UserListItem from './UserListItem';
 import Loading from './presentational/Loading';
 import Error from './presentational/Error';
@@ -42,13 +43,16 @@ const UserList = (props) => {
                 ) : isError ? (
                     <Error />
                     ) : (
-                        <Paper elevation={3}>
-                            <List className={classes.list}>
-                                {userData.map(user => (
-                                    <UserListItem user={user} key={user.googleId} id={user.googleId} />
-                                ))}
-                            </List>
-                        </Paper>
+                        <React.Fragment>
+                            <UserListHeader userData={userData} />
+                            <Paper elevation={3}>
+                                <List className={classes.list}>
+                                    {userData.map(user => (
+                                        <UserListItem user={user} key={user.googleId} id={user.googleId} />
+                                    ))}
+                                </List>
+                            </Paper>
+                        </React.Fragment>
                     )
             }
         </React.Fragment>
