@@ -7,45 +7,52 @@ import {
     SET_USER_PROPS,
     UNSET_PROFILE,
     SET_DEVICE_PROPS,
-    HANDLE_LOADING
+    HANDLE_LOADING,
+    HANDLE_FEEDBACK
 } from './actionTypes';
 
 // User Login & Profile Object
 export const googleLoginRequest = () => dispatch => {
-    console.log('Login Request');
+    console.log('ACTION: Login Request');
     dispatch({ type: LOG_IN_PENDING });
 }
 
 export const googleLoginSuccess = (response) => dispatch => {
-    console.log('Login Success',{response});
+    console.log('ACTION: Login Success',{response});
     dispatch({ type: LOG_IN_SUCCESS, payload: response });
     dispatch({ type: SET_PROFILE, payload: response });
 }
 
 export const googleLoginFailure = (error) => dispatch => {
-    console.log('Login Error',{error});
+    console.log('ACTION: Login Error',{error});
     dispatch({ type: LOG_IN_FAILURE, payload: error });
 }
 
 export const googleLogoutSuccess = () => dispatch => {
-    console.log('Logout Success');
+    console.log('ACTION: Logout Success');
     dispatch({ type: LOG_OUT_SUCCESS });
     dispatch({ type: UNSET_PROFILE });
 }
 
 export const userAdditionalProps = (props) => dispatch => {
-    console.log('User Props',{props});
+    console.log('ACTION: User Props',{props});
     dispatch({ type: SET_USER_PROPS, payload: props });
 }
 
 // Devices Object
 export const userDevicesProps = (props) => dispatch => {
-    console.log('Device Props',{props});
+    console.log('ACTION: Device Props',{props});
     dispatch({ type: SET_DEVICE_PROPS, payload: props });
 }
 
 // Utils
 export const handleLoading = (boolean) => dispatch => {
-    console.log('Handling Loading...');
+    console.log('ACTION: Handling Loading...');
     dispatch({ type: HANDLE_LOADING, payload: boolean });
+}
+
+// Alert Feedback
+export const alertProps = (props) => dispatch => {
+    console.log('ACTION: Alert',{props});
+    dispatch({ type: HANDLE_FEEDBACK, payload: props });
 }

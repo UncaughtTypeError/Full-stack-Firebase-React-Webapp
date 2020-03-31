@@ -14,3 +14,6 @@ export const SET_DEVICE_PROPS = 'SET_DEVICE_PROPS';
 
 // Utils
 export const HANDLE_LOADING = 'HANDLE_LOADING';
+
+// Alert Feedback
+export const HANDLE_FEEDBACK = 'HANDLE_FEEDBACK';
