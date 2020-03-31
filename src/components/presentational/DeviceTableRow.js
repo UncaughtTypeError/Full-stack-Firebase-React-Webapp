@@ -3,9 +3,12 @@ import React, { useState, useEffect } from 'react';
 import withFirebase from '../containers/withFirebase';
 import InputTextField from './InputTextField';
 import InputCheckbox from './InputCheckbox';
-import SnackbarAlert from './SnackbarAlert';
 // Utils
 import validateFields from '../../utils/validateFields';
+// Redux
+import { useDispatch } from 'react-redux';
+// Actions
+import { alertProps } from '../../redux/actions/actions';
 // Theme
 import { makeStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
@@ -37,11 +40,13 @@ const DeviceTableRow = (props) => {
 
     const classes = useStyles();
 
+    const   dispatch      = useDispatch(),
+            setAlertProps = (props) => dispatch(alertProps(props));
+
     const   [deviceData, setDeviceData] = useState({}),
             [isDisabled, setIsDisabled] = useState(false),
             [inputChecked, setInputChecked] = useState(device.takenHome),
-            [validationData, setValidationData] = useState({}),
-            [isAlert, setIsAlert] = useState({ alert: false, severity: '', message: '' });
+            [validationData, setValidationData] = useState({});
 
     useEffect(() => {
 
@@ -69,11 +74,10 @@ const DeviceTableRow = (props) => {
         child.once('value', (snapshot) => {
             let existingData = snapshot.val();
             child.update({ ...existingData, ...updateData }).then(function(){
-                    console.log('Update success');
-                    setIsAlert({ alert: true, severity: 'success', message: 'Update successful!' });
+                    setAlertProps({ alert: true, severity: 'success', message: 'Update successful!', open: true });
                 }).catch(function(error) {
                     console.error('Update could not be saved.' + error);
-                    setIsAlert({ alert: true, severity: 'error', message: 'Database Error. Update failed...' });
+                    setAlertProps({ alert: true, severity: 'error', message: 'Database Error. Update failed...', open: true });
                 });
         });
     };
@@ -100,9 +104,6 @@ const DeviceTableRow = (props) => {
 
     return (
         <TableRow key={device.id} id={device.id}>
-            {(isAlert.alert && (
-                <SnackbarAlert severity={isAlert.severity} message={isAlert.message} open={true} />
-            ))}
             {( state_user.dataEdit && 
                 (user_googleId === user_edit) && 
                 (user_googleId === state_user.googleId || state_user.role === 'admin') ) ? (

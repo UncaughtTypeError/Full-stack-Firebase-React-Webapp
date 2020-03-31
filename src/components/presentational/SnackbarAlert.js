@@ -1,4 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+// Redux
+import { useDispatch, useSelector } from 'react-redux';
+// Actions
+import { alertProps } from '../../redux/actions/actions';
 // Theme
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
@@ -14,14 +18,21 @@ const Alert = (props) => {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-const SnackbarAlert = (props) => {
-
-    const { message, severity, open } = props;
+const SnackbarAlert = () => {
 
     const classes = useStyles();
 
-    const [isOpen, setIsOpen] = useState(open);
-    console.log({isOpen});
+    const   state_alertProps = useSelector(state => state.alertObject),
+            dispatch         = useDispatch(),
+            setAlertProps    = (props) => dispatch(alertProps(props));
+
+    const [isOpen, setIsOpen] = useState(false);
+
+    useEffect(() => {
+        
+        setIsOpen(state_alertProps.open);
+
+    },[state_alertProps]);
 
     const onClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -29,23 +40,28 @@ const SnackbarAlert = (props) => {
         }
 
         setIsOpen(false);
+        setAlertProps({ alert: false, severity: '', message: '', open: false });
     };
 
     return (
-        <Snackbar 
-            className={classes.anchorOriginBottomLeft}
-            anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-            }} 
-            open={isOpen} 
-            autoHideDuration={6000} 
-            onClose={onClose}
-        >
-            <Alert onClose={onClose} severity={severity}>
-                {message}
-            </Alert>
-        </Snackbar>
+        <React.Fragment>
+            {(state_alertProps.alert && (
+                <Snackbar 
+                    className={classes.anchorOriginBottomLeft}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }} 
+                    open={isOpen} 
+                    autoHideDuration={3000} 
+                    onClose={onClose}
+                >
+                    <Alert onClose={onClose} severity={state_alertProps.severity}>
+                        {state_alertProps.message}
+                    </Alert>
+                </Snackbar>
+            ))}
+        </React.Fragment>
     );
 }
 

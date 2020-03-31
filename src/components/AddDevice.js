@@ -8,13 +8,14 @@ import InputCheckbox from './presentational/InputCheckbox';
 import Users from './presentational/Users';
 import Loading from './presentational/Loading';
 import Error from './presentational/Error';
-import SnackbarAlert from './presentational/SnackbarAlert';
 // Utils
 import useFirebaseDataApi from '../utils/hooks/useFirebaseDataApi';
 import writeUserData from '../utils/writeUserData';
 import validateFields from '../utils/validateFields';
 // Redux
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+// Actions
+import { alertProps } from '../redux/actions/actions';
 // Theme
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -70,7 +71,9 @@ const useStyles = makeStyles(theme => ({
 const AddItem = (props) => {
     const   state_profileObject = useSelector(state => state.profileObject),
             state_googleId      = state_profileObject.googleId,
-            state_role          = state_profileObject.role;
+            state_role          = state_profileObject.role,
+            dispatch            = useDispatch(),
+            setAlertProps       = (props) => dispatch(alertProps(props));
 
     const   { firebase } = props;
 
@@ -84,8 +87,7 @@ const AddItem = (props) => {
             [addDevice, setAddDevice] = useState({ laptops: false, monitors: false }),
             [isDisabled, setIsDisabled] = useState(true),
             [employeeAssignment, setEmployeeAssignment] = useState(false),
-            [userId, setUserId] = useState(state_googleId),
-            [isAlert, setIsAlert] = useState({ alert: false, severity: '', message: '' });
+            [userId, setUserId] = useState(state_googleId);
 
     useEffect(() => {
 
@@ -140,11 +142,10 @@ const AddItem = (props) => {
             child = ref.child(userId).child('devices').child(deviceType);
 
             child.push(deviceData[deviceType]).then(function(){
-                console.log('Update success');
-                setIsAlert({ alert: true, severity: 'success', message: 'Update successful!' });
+                setAlertProps({ alert: true, severity: 'success', message: 'Update successful!', open: true });
             }).catch(function(error) {
                 console.error('Update could not be saved.' + error);
-                setIsAlert({ alert: true, severity: 'error', message: 'Database Error. Update failed...' });
+                setAlertProps({ alert: true, severity: 'error', message: 'Database Error. Update failed...', open: true });
             });;
         });
 
@@ -172,206 +173,201 @@ const AddItem = (props) => {
     };
 
     return (
-        <React.Fragment>
-            {(isAlert.alert && (
-                <SnackbarAlert severity={isAlert.severity} message={isAlert.message} open={true} />
-            ))}
-            <Card className={classes.card} elevation={3}>
-                <CardContent className={classes.cardContent}>
-                    <Typography variant="h6">Add A New Device</Typography>
-                    <FieldSet legend="Type of device" className={classes.fieldSet}>
-                        <RadioGroup row>
-                            <InputRadio 
-                                id="deviceType_laptop" 
-                                name="typeOfDevice" 
-                                value="laptops" 
-                                defaultChecked={addDevice.laptops} 
-                                checked={addDevice.laptops}
-                                onChange={e => onDeviceSelection(e.target.value,e)}
-                                label="Laptop"
-                                htmlFor="deviceType_laptop"
-                            />
-                            <InputRadio 
-                                id="deviceType_monitor" 
-                                name="typeOfDevice" 
-                                value="monitors" 
-                                defaultChecked={addDevice.monitors} 
-                                checked={addDevice.monitors}
-                                onChange={e => onDeviceSelection(e.target.value,e)}
-                                label="Monitor"
-                                htmlFor="deviceType_monitor"
-                            />
-                        </RadioGroup>
+        <Card className={classes.card} elevation={3}>
+            <CardContent className={classes.cardContent}>
+                <Typography variant="h6">Add A New Device</Typography>
+                <FieldSet legend="Type of device" className={classes.fieldSet}>
+                    <RadioGroup row>
+                        <InputRadio 
+                            id="deviceType_laptop" 
+                            name="typeOfDevice" 
+                            value="laptops" 
+                            defaultChecked={addDevice.laptops} 
+                            checked={addDevice.laptops}
+                            onChange={e => onDeviceSelection(e.target.value,e)}
+                            label="Laptop"
+                            htmlFor="deviceType_laptop"
+                        />
+                        <InputRadio 
+                            id="deviceType_monitor" 
+                            name="typeOfDevice" 
+                            value="monitors" 
+                            defaultChecked={addDevice.monitors} 
+                            checked={addDevice.monitors}
+                            onChange={e => onDeviceSelection(e.target.value,e)}
+                            label="Monitor"
+                            htmlFor="deviceType_monitor"
+                        />
+                    </RadioGroup>
+                </FieldSet>
+                { deviceType === 'laptops' && (
+                    <FieldSet legend="Add new laptop" className={classes.fieldSet}>
+                        <Box display="flex" alignItems="center" component="div" className={classes.fieldWrap}>
+                            <Box flexGrow={1}>
+                                <InputTextField 
+                                    placeholder='Make / Model'
+                                    id='laptop_makeModel'
+                                    dataKey='makeModel'
+                                    dataFieldID={`laptops_makeModel${1}`}
+                                    error={validationData[`laptops_makeModel${1}`]}
+                                    onBlur={e => onEdit(
+                                        e.target.dataset.key, 
+                                        e.target.value, 
+                                        e.target.dataset.fieldid, 
+                                        e.target.required
+                                    )}
+                                    label="Make / Model"
+                                    htmlFor="laptop_makeModel"
+                                    required={true}
+                                />
+                            </Box>
+                            <Box flexGrow={1}>
+                                <InputTextField 
+                                    placeholder='Serial No.'
+                                    id='laptop_serialNo'
+                                    dataKey='serialNo'
+                                    dataFieldID={`laptops_makeModel${2}`}
+                                    error={validationData[`laptops_makeModel${2}`]}
+                                    onBlur={e => onEdit(
+                                        e.target.dataset.key, 
+                                        e.target.value, 
+                                        e.target.dataset.fieldid, 
+                                        e.target.required
+                                    )}
+                                    label="Serial No."
+                                    htmlFor="laptop_serialNo"
+                                    required={true}
+                                />
+                            </Box>
+                            <Box>
+                                <InputCheckbox 
+                                    placeholder='Taken home?'
+                                    id='laptop_takenHome'
+                                    dataKey='takenHome'
+                                    dataFieldID={`laptops_makeModel${3}`}
+                                    error={validationData[`laptops_makeModel${3}`]}
+                                    onChange={e => onEdit(
+                                        e.target.dataset.key, 
+                                        e.target.checked, 
+                                        e.target.dataset.fieldid, 
+                                        e.target.required
+                                    )}
+                                    label="Taken home?"
+                                    htmlFor="laptop_takenHome"
+                                    labelPlacement="start"
+                                    required={false}
+                                />
+                            </Box>
+                        </Box>
                     </FieldSet>
-                    { deviceType === 'laptops' && (
-                        <FieldSet legend="Add new laptop" className={classes.fieldSet}>
-                            <Box display="flex" alignItems="center" component="div" className={classes.fieldWrap}>
-                                <Box flexGrow={1}>
-                                    <InputTextField 
-                                        placeholder='Make / Model'
-                                        id='laptop_makeModel'
-                                        dataKey='makeModel'
-                                        dataFieldID={`laptops_makeModel${1}`}
-                                        error={validationData[`laptops_makeModel${1}`]}
-                                        onBlur={e => onEdit(
-                                            e.target.dataset.key, 
-                                            e.target.value, 
-                                            e.target.dataset.fieldid, 
-                                            e.target.required
-                                        )}
-                                        label="Make / Model"
-                                        htmlFor="laptop_makeModel"
-                                        required={true}
-                                    />
-                                </Box>
-                                <Box flexGrow={1}>
-                                    <InputTextField 
-                                        placeholder='Serial No.'
-                                        id='laptop_serialNo'
-                                        dataKey='serialNo'
-                                        dataFieldID={`laptops_makeModel${2}`}
-                                        error={validationData[`laptops_makeModel${2}`]}
-                                        onBlur={e => onEdit(
-                                            e.target.dataset.key, 
-                                            e.target.value, 
-                                            e.target.dataset.fieldid, 
-                                            e.target.required
-                                        )}
-                                        label="Serial No."
-                                        htmlFor="laptop_serialNo"
-                                        required={true}
-                                    />
-                                </Box>
-                                <Box>
-                                    <InputCheckbox 
-                                        placeholder='Taken home?'
-                                        id='laptop_takenHome'
-                                        dataKey='takenHome'
-                                        dataFieldID={`laptops_makeModel${3}`}
-                                        error={validationData[`laptops_makeModel${3}`]}
-                                        onChange={e => onEdit(
-                                            e.target.dataset.key, 
-                                            e.target.checked, 
-                                            e.target.dataset.fieldid, 
-                                            e.target.required
-                                        )}
-                                        label="Taken home?"
-                                        htmlFor="laptop_takenHome"
-                                        labelPlacement="start"
-                                        required={false}
-                                    />
-                                </Box>
+                )}
+                {deviceType === 'monitors' && (
+                    <FieldSet legend="Add new monitor" className={classes.fieldSet}>
+                        <Box display="flex" alignItems="center" component="div" className={classes.fieldWrap}>
+                            <Box flexGrow={1}>
+                                <InputTextField 
+                                    placeholder='Make / Model'
+                                    id='monitor_makeModel'
+                                    dataKey='makeModel'
+                                    dataFieldID={`monitors_makeModel${1}`}
+                                    error={validationData[`monitors_makeModel${1}`]}
+                                    onBlur={e => onEdit(
+                                        e.target.dataset.key, 
+                                        e.target.value, 
+                                        e.target.dataset.fieldid, 
+                                        e.target.required
+                                    )}
+                                    label="Make / Model"
+                                    htmlFor="monitor_makeModel"
+                                    required={true}
+                                />
                             </Box>
-                        </FieldSet>
-                    )}
-                    {deviceType === 'monitors' && (
-                        <FieldSet legend="Add new monitor" className={classes.fieldSet}>
-                            <Box display="flex" alignItems="center" component="div" className={classes.fieldWrap}>
-                                <Box flexGrow={1}>
-                                    <InputTextField 
-                                        placeholder='Make / Model'
-                                        id='monitor_makeModel'
-                                        dataKey='makeModel'
-                                        dataFieldID={`monitors_makeModel${1}`}
-                                        error={validationData[`monitors_makeModel${1}`]}
-                                        onBlur={e => onEdit(
-                                            e.target.dataset.key, 
-                                            e.target.value, 
-                                            e.target.dataset.fieldid, 
-                                            e.target.required
-                                        )}
-                                        label="Make / Model"
-                                        htmlFor="monitor_makeModel"
-                                        required={true}
-                                    />
-                                </Box>
-                                <Box flexGrow={1}>
-                                    <InputTextField 
-                                        placeholder='Serial No.'
-                                        id='monitor_serialNo'
-                                        dataKey='serialNo'
-                                        dataFieldID={`monitors_makeModel${2}`}
-                                        error={validationData[`monitors_makeModel${2}`]}
-                                        onBlur={e => onEdit(
-                                            e.target.dataset.key, 
-                                            e.target.value, 
-                                            e.target.dataset.fieldid, 
-                                            e.target.required
-                                        )}
-                                        label="Serial No."
-                                        htmlFor="monitor_serialNo"
-                                        required={true}
-                                    />
-                                </Box>
-                                <Box flexGrow={1}>
-                                    <InputTextField 
-                                        placeholder='Screen Size'
-                                        id='monitor_screenSize'
-                                        dataKey='screenSize'
-                                        dataFieldID={`monitors_makeModel${3}`}
-                                        error={validationData[`monitors_makeModel${3}`]}
-                                        onBlur={e => onEdit(
-                                            e.target.dataset.key, 
-                                            e.target.value, 
-                                            e.target.dataset.fieldid, 
-                                            e.target.required
-                                        )}
-                                        label="Screen Size"
-                                        htmlFor="monitor_screenSize"
-                                        required={true}
-                                    />
-                                </Box>
+                            <Box flexGrow={1}>
+                                <InputTextField 
+                                    placeholder='Serial No.'
+                                    id='monitor_serialNo'
+                                    dataKey='serialNo'
+                                    dataFieldID={`monitors_makeModel${2}`}
+                                    error={validationData[`monitors_makeModel${2}`]}
+                                    onBlur={e => onEdit(
+                                        e.target.dataset.key, 
+                                        e.target.value, 
+                                        e.target.dataset.fieldid, 
+                                        e.target.required
+                                    )}
+                                    label="Serial No."
+                                    htmlFor="monitor_serialNo"
+                                    required={true}
+                                />
                             </Box>
-                        </FieldSet>
-                    )}
-                    {(state_role === 'admin' && (deviceType === 'laptops' || deviceType === 'monitors')) && (
-                        <FieldSet legend="Assign to Employee" className={classes.fieldSet}>
-                            <InputCheckbox 
-                                id="employeeAssignment" 
-                                name="employeeAssignment" 
-                                defaultChecked={false} 
-                                onChange={e => onEmployeeAssignment(e.target.checked)}
-                                label="Yes"
-                                htmlFor="employeeAssignment"
-                            />
-                            {employeeAssignment && (
-                                isLoading ? (
-                                    <Loading size={20} display="inline" />
+                            <Box flexGrow={1}>
+                                <InputTextField 
+                                    placeholder='Screen Size'
+                                    id='monitor_screenSize'
+                                    dataKey='screenSize'
+                                    dataFieldID={`monitors_makeModel${3}`}
+                                    error={validationData[`monitors_makeModel${3}`]}
+                                    onBlur={e => onEdit(
+                                        e.target.dataset.key, 
+                                        e.target.value, 
+                                        e.target.dataset.fieldid, 
+                                        e.target.required
+                                    )}
+                                    label="Screen Size"
+                                    htmlFor="monitor_screenSize"
+                                    required={true}
+                                />
+                            </Box>
+                        </Box>
+                    </FieldSet>
+                )}
+                {(state_role === 'admin' && (deviceType === 'laptops' || deviceType === 'monitors')) && (
+                    <FieldSet legend="Assign to Employee" className={classes.fieldSet}>
+                        <InputCheckbox 
+                            id="employeeAssignment" 
+                            name="employeeAssignment" 
+                            defaultChecked={false} 
+                            onChange={e => onEmployeeAssignment(e.target.checked)}
+                            label="Yes"
+                            htmlFor="employeeAssignment"
+                        />
+                        {employeeAssignment && (
+                            isLoading ? (
+                                <Loading size={20} display="inline" />
+                                ) : (
+                                isError ? (
+                                    <Error />
                                     ) : (
-                                    isError ? (
-                                        <Error />
-                                        ) : (
-                                            <List className={classes.list}>
-                                                {userData.map(user => (
-                                                    <Users 
-                                                        user={user} 
-                                                        selectedUser={userId} 
-                                                        key={user.googleId} 
-                                                        onClick={() => onUserSelect(user.googleId)} 
-                                                    />
-                                                ))}
-                                            </List>
-                                        )
+                                        <List className={classes.list}>
+                                            {userData.map(user => (
+                                                <Users 
+                                                    user={user} 
+                                                    selectedUser={userId} 
+                                                    key={user.googleId} 
+                                                    onClick={() => onUserSelect(user.googleId)} 
+                                                />
+                                            ))}
+                                        </List>
                                     )
                                 )
-                            }
-                        </FieldSet>
+                            )
+                        }
+                    </FieldSet>
+                )}
+                <CardActions className={classes.cardActions}>
+                    {(deviceType === 'laptops' || deviceType === 'monitors') && (
+                        <ButtonGroup variant="outlined" className={classes.buttonGroup}>
+                            <Button onClick={() => onAdd()} disabled={isDisabled}>
+                                <AddIcon fontSize="small" className={classes.icon} /> Add Device
+                            </Button>
+                            <Button onClick={() => onCancel()}>
+                                <ClearIcon fontSize="small" className={classes.icon} /> Cancel
+                            </Button>
+                        </ButtonGroup>
                     )}
-                    <CardActions className={classes.cardActions}>
-                        {(deviceType === 'laptops' || deviceType === 'monitors') && (
-                            <ButtonGroup variant="outlined" className={classes.buttonGroup}>
-                                <Button onClick={() => onAdd()} disabled={isDisabled}>
-                                    <AddIcon fontSize="small" className={classes.icon} /> Add Device
-                                </Button>
-                                <Button onClick={() => onCancel()}>
-                                    <ClearIcon fontSize="small" className={classes.icon} /> Cancel
-                                </Button>
-                            </ButtonGroup>
-                        )}
-                    </CardActions>
-                </CardContent>
-            </Card>
-        </React.Fragment>
+                </CardActions>
+            </CardContent>
+        </Card>
     );
 
 }

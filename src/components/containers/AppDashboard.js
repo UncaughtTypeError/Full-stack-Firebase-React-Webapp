@@ -5,6 +5,7 @@ import Body from '../presentational/Body';
 import Footer from '../presentational/Footer';
 import AddDevice from '../AddDevice';
 import UsersList from '../UsersList';
+import SnackbarAlert from '../presentational/SnackbarAlert';
 
 const AppDashboard = () => {
 
@@ -14,6 +15,7 @@ const AppDashboard = () => {
             <Body>
                 <AddDevice />
                 <UsersList />
+                <SnackbarAlert />
             </Body>
             <Footer />
         </React.Fragment>
