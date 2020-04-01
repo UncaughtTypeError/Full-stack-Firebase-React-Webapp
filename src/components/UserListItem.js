@@ -99,6 +99,7 @@ const UserListItem = (props) => {
                                 <DevicesTable 
                                     devices={user.devices.laptops} 
                                     deviceType='laptops'
+                                    devicesNum={devicesNum.laptopsNum}
                                     state_user={state_user} 
                                     user_edit={userEdit} 
                                     user_googleId={user.googleId} 
@@ -112,6 +113,7 @@ const UserListItem = (props) => {
                                 <DevicesTable 
                                     devices={user.devices.monitors} 
                                     deviceType='monitors'
+                                    devicesNum={devicesNum.monitorsNum}
                                     state_user={state_user} 
                                     user_edit={userEdit} 
                                     user_googleId={user.googleId} 
