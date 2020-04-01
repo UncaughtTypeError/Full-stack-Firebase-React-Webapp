@@ -64,7 +64,7 @@ const UserListItem = (props) => {
                 <Box component="div" style={{ width: '100%' }}>
                     <Box display="flex" alignItems="center">
                         <Box component="div" flexGrow={1}>
-                            <ListItemProfile profile={user.profile} role={state_user.role} />
+                            <ListItemProfile profile={user.profile} roles={{ viewerRole: state_user.role, userRole: user.role }} />
                         </Box>
                         <Box component="div">
                             {(devicesNum.laptopsNum > 0) && (
@@ -83,7 +83,7 @@ const UserListItem = (props) => {
                                     // is the current user editing?
                                     state_user.dataEdit && (user.googleId === userEdit) ? (
                                         <Button variant="contained" onClick={() => onUserEdit(false)}>
-                                            <ClearIcon fontSize="small" className={classes.icon} /> Cancel
+                                            <ClearIcon fontSize="small" className={classes.icon} /> Done
                                         </Button>
                                     ) : (
                                         <Button variant="outlined" onClick={() => onUserEdit(true, user.googleId)}>
