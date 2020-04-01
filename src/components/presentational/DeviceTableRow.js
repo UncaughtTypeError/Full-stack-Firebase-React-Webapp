@@ -61,7 +61,12 @@ const DeviceTableRow = (props) => {
                 ref     = db.ref('users'),
                 child   = ref.child(userId).child('devices').child(deviceType).child(deviceId);
 
-        child.remove();
+        child.remove().then(function(){
+            setAlertProps({ alert: true, severity: 'success', message: 'Device Removed.', open: true });
+        }).catch(function(error) {
+            console.error('Update could not be saved.' + error);
+            setAlertProps({ alert: true, severity: 'error', message: 'Database Error. Removal failed...', open: true });
+        });
     };
 
     const onUpdate = (userId, deviceId, deviceType) => {
