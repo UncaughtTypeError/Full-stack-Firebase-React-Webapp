@@ -142,11 +142,11 @@ const AddItem = (props) => {
             child = ref.child(userId).child('devices').child(deviceType);
 
             child.push(deviceData[deviceType]).then(function(){
-                setAlertProps({ alert: true, severity: 'success', message: 'Update successful!', open: true });
+                setAlertProps({ alert: true, severity: 'success', message: 'Device Added.', open: true });
             }).catch(function(error) {
                 console.error('Update could not be saved.' + error);
                 setAlertProps({ alert: true, severity: 'error', message: 'Database Error. Update failed...', open: true });
-            });;
+            });
         });
 
     };
