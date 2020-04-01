@@ -9,7 +9,8 @@ import {
     SET_DEVICE_PROPS,
     HANDLE_LOADING,
     HANDLE_FEEDBACK,
-    HANDLE_DISPLAY
+    HANDLE_DISPLAY,
+    HANDLE_SEARCH_FILTER
 } from './actionTypes';
 
 // User Login & Profile Object
@@ -62,4 +63,10 @@ export const alertProps = (props) => dispatch => {
 export const dataDisplayProps = (props) => dispatch => {
     console.log('ACTION: Data Display Props',{props});
     dispatch({ type: HANDLE_DISPLAY, payload: props });
+}
+
+// Search Filter Results
+export const handleSearchFilter = (results) => dispatch => {
+    console.log('ACTION: Search Filter Results',{results});
+    dispatch({ type: HANDLE_SEARCH_FILTER, payload: results });
 }

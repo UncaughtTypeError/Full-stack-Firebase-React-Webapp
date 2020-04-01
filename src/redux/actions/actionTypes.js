@@ -20,3 +20,6 @@ export const HANDLE_FEEDBACK = 'HANDLE_FEEDBACK';
 
 // Data Display
 export const HANDLE_DISPLAY = 'HANDLE_DISPLAY';
+
+// Search Filter Results
+export const HANDLE_SEARCH_FILTER = 'HANDLE_SEARCH_FILTER';
