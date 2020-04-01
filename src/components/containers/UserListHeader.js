@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 // Components
 import withFirebase from './withFirebase';
+import SearchFilter from './SearchFilter';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 // Actions
@@ -11,15 +12,10 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
 import Badge from '@material-ui/core/Badge';
-import TextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
-import IconButton from '@material-ui/core/IconButton';
 import ComputerIcon from '@material-ui/icons/Computer';
 import DesktopWindowsIcon from '@material-ui/icons/DesktopWindows';
-import SearchIcon from '@material-ui/icons/Search';
-import ClearIcon from '@material-ui/icons/Clear';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -142,32 +138,7 @@ const UserListHeader = (props) => {
                 </Typography>
             </Box>
             <Box flexGrow={1} display="flex" justifyContent="flex-end">
-                <TextField
-                    className={classes.search}
-                    id="user-search"
-                    placeholder="Search Users..."
-                    variant="filled"
-                    size="small"
-                    InputProps={{
-                        'aria-label': "Search Users...",
-                        startAdornment: (
-                            <InputAdornment className={classes.searchIcon} position="start">
-                                <SearchIcon fontSize="small" color="action" />
-                            </InputAdornment>
-                        ),
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton
-                                    aria-label="Clear Field"
-                                    onClick={(e => e.target.prevent.default)}
-                                    size="small"
-                                >
-                                    <ClearIcon fontSize="small" />
-                                </IconButton>
-                            </InputAdornment>
-                        ),
-                    }}
-                />
+                <SearchFilter userData={userData} />
             </Box>
         </Box>
     );
