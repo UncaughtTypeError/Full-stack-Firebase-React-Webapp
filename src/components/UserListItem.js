@@ -6,7 +6,7 @@ import DevicesTable from './presentational/DevicesTable';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 // Actions
-import { userAdditionalProps } from '../redux/actions/actions';
+import { userAdditionalProps, dataDisplayProps } from '../redux/actions/actions';
 // Theme
 import { makeStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
@@ -37,9 +37,11 @@ const UserListItem = (props) => {
 
     const classes = useStyles();
     
-    const   state_user          = useSelector(state => state.profileObject),
-            dispatch            = useDispatch(),
-            setAdditionalProps  = (props) => dispatch(userAdditionalProps(props));
+    const   state_user                  = useSelector(state => state.profileObject),
+            state_displayTypeSummary    = useSelector(state => state.dataDisplaytObject.displayTypeSummary),
+            dispatch                    = useDispatch(),
+            setAdditionalProps          = (props) => dispatch(userAdditionalProps(props)),
+            setDataDisplayProps         = (props) => dispatch(dataDisplayProps(props));
 
     const   [userEdit, setUserEdit] = useState(null),
             [devicesNum, setDevicesNum] = useState({});
@@ -47,7 +49,18 @@ const UserListItem = (props) => {
     const onUserEdit = (boolean, userId = null) => {
         setUserEdit(userId);
         setAdditionalProps({ dataEdit: boolean });
+        setDataDisplayProps({ displayTypeSummary: false });
     }
+
+    useEffect(() => {
+
+        state_displayTypeSummary ? (
+            setAdditionalProps({ dataEdit: false })
+        ) : (
+            setAdditionalProps({ dataEdit: true })
+        );
+
+    }, [state_displayTypeSummary]);
 
     useEffect(() => {
 

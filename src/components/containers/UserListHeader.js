@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 // Components
 import withFirebase from './withFirebase';
 // Redux
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 // Actions
 import { dataDisplayProps } from '../../redux/actions/actions';
 // Theme
@@ -63,11 +63,12 @@ const UserListHeader = (props) => {
 
     const classes = useStyles();
     
-    const   dispatch            = useDispatch(),
-            setDataDisplayProps = (props) => dispatch(dataDisplayProps(props));
+    const   state_displayTypeSummary    = useSelector(state => state.dataDisplaytObject.displayTypeSummary),
+            dispatch                    = useDispatch(),
+            setDataDisplayProps         = (props) => dispatch(dataDisplayProps(props));
 
-    const   [displayType, setDisplayType] = useState(null),
-            [devicesNum, setDevicesNum] = useState({});
+    const   [displayType, setDisplayType]   = useState(state_displayTypeSummary),
+            [devicesNum, setDevicesNum]     = useState({});
 
     const onDeviceDetailsDisplay = (event) => {
         setDisplayType(event.target.checked);
@@ -78,6 +79,12 @@ const UserListHeader = (props) => {
         setDataDisplayProps({ displayTypeSummary: displayType });
 
     }, [displayType]);
+
+    useEffect(() => {
+
+        setDisplayType(state_displayTypeSummary);
+
+    }, [state_displayTypeSummary]);
 
     useEffect(() => {
 

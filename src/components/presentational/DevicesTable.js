@@ -1,6 +1,8 @@
 import React from 'react';
 // Components
 import DeviceTableRow from './DeviceTableRow';
+// Redux
+import { useSelector } from 'react-redux';
 // Theme
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -11,6 +13,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import Badge from '@material-ui/core/Badge';
 import ComputerIcon from '@material-ui/icons/Computer';
 import DesktopWindowsIcon from '@material-ui/icons/DesktopWindows';
 
@@ -37,12 +40,22 @@ const useStyles = makeStyles(theme => ({
     icon: {
         color: theme.palette.action.disabled,
         verticalAlign: 'bottom',
+    },
+    badge: {
+        marginRight: 0,
+        '& > span': {
+            position: 'relative',
+            transform: 'scale(1) translate(0%, 0%)',
+            background: '#9c9c9c',
+        }
     }
 }));
 
 const DevicesTable = (props) => {
 
-    const { devices, deviceType, state_user, user_googleId, user_edit } = props;
+    const { devices, deviceType, devicesNum, state_user, user_googleId, user_edit } = props;
+    
+    const state_displayTypeSummary = useSelector(state => state.dataDisplaytObject.displayTypeSummary);
 
     const classes = useStyles();
 
@@ -53,14 +66,44 @@ const DevicesTable = (props) => {
                     {deviceType === 'laptops' && (
                         <React.Fragment>
                             <TableRow className={classes.tableHeader}>
-                                <TableCell colSpan={4}>
+                                <TableCell colSpan={2}>
                                     <Typography component="h5"><ComputerIcon className={classes.icon} /> Laptops</Typography>
                                 </TableCell>
+                                <TableCell colSpan={2} align="right">
+                                    <Badge className={classes.badge} badgeContent={devicesNum} color="primary" />
+                                </TableCell>
                             </TableRow>
+                            {!state_displayTypeSummary && (
+                                <TableRow>
+                                    <TableCell align="left" className={classes.tableLeadColumn}>Make / Model</TableCell>
+                                    <TableCell align="right" className={classes.tableDataColumn}>Serial No.</TableCell>
+                                    <TableCell align="right" className={classes.tableDataColumn}>Taken Home?</TableCell>
+                                    {( state_user.dataEdit && 
+                                        (user_googleId === user_edit) && 
+                                        (user_googleId === state_user.googleId || state_user.role === 'admin') ) ? (
+                                            <TableCell align="right" className={classes.tableDataColumn}>Actions</TableCell>
+                                        ) : (
+                                            <TableCell align="right" className={classes.tableEmptyColumn}></TableCell>
+                                    )}
+                                </TableRow>
+                            )}
+                        </React.Fragment>
+                    )}
+                    {deviceType === 'monitors' && (
+                        <React.Fragment>
+                        <TableRow className={classes.tableHeader}>
+                            <TableCell colSpan={2}>
+                                <Typography component="h5"><DesktopWindowsIcon className={classes.icon} /> Monitors</Typography>
+                            </TableCell>
+                            <TableCell colSpan={2} align="right">
+                                <Badge className={classes.badge} badgeContent={devicesNum} color="primary" />
+                            </TableCell>
+                        </TableRow>
+                        {!state_displayTypeSummary && (
                             <TableRow>
                                 <TableCell align="left" className={classes.tableLeadColumn}>Make / Model</TableCell>
                                 <TableCell align="right" className={classes.tableDataColumn}>Serial No.</TableCell>
-                                <TableCell align="right" className={classes.tableDataColumn}>Taken Home?</TableCell>
+                                <TableCell align="right" className={classes.tableDataColumn}>Screen Size</TableCell>
                                 {( state_user.dataEdit && 
                                     (user_googleId === user_edit) && 
                                     (user_googleId === state_user.googleId || state_user.role === 'admin') ) ? (
@@ -69,32 +112,12 @@ const DevicesTable = (props) => {
                                         <TableCell align="right" className={classes.tableEmptyColumn}></TableCell>
                                 )}
                             </TableRow>
-                        </React.Fragment>
-                    )}
-                    {deviceType === 'monitors' && (
-                        <React.Fragment>
-                        <TableRow className={classes.tableHeader}>
-                            <TableCell colSpan={4}>
-                                <Typography component="h5"><DesktopWindowsIcon className={classes.icon} /> Monitors</Typography>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell align="left" className={classes.tableLeadColumn}>Make / Model</TableCell>
-                            <TableCell align="right" className={classes.tableDataColumn}>Serial No.</TableCell>
-                            <TableCell align="right" className={classes.tableDataColumn}>Screen Size</TableCell>
-                            {( state_user.dataEdit && 
-                                (user_googleId === user_edit) && 
-                                (user_googleId === state_user.googleId || state_user.role === 'admin') ) ? (
-                                    <TableCell align="right" className={classes.tableDataColumn}>Actions</TableCell>
-                                ) : (
-                                    <TableCell align="right" className={classes.tableEmptyColumn}></TableCell>
-                            )}
-                        </TableRow>
+                        )}
                         </React.Fragment>
                     )}
                 </TableHead>
                 <TableBody>
-                    {deviceType === 'laptops' && (
+                    {(deviceType === 'laptops' && !state_displayTypeSummary) && (
                         devices.map(laptop => (
                             <DeviceTableRow 
                                 device={laptop} 
@@ -107,7 +130,7 @@ const DevicesTable = (props) => {
                             />
                         ))
                     )}
-                    {deviceType === 'monitors' && (
+                    {(deviceType === 'monitors' && !state_displayTypeSummary) && (
                         devices.map(monitor => (
                             <DeviceTableRow 
                                 device={monitor} 
