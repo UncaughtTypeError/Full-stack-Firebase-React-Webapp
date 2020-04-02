@@ -10,6 +10,7 @@ import rootReducer from './reducers';
 
 const persistConfig = {
     key: 'root',
+    blacklist: ['searchFilterResults'],
     storage,
     stateReconciler: autoMergeLevel2
 }
