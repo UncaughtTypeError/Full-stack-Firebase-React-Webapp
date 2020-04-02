@@ -52,7 +52,7 @@ const SearchFilter = (props) => {
         });
 
         console.log({matchArray});
-        //setSearchFilterResults(matchArray);
+        setSearchFilterResults(matchArray);
 
         // const html = matchArray.map(htmlElement => {
     
