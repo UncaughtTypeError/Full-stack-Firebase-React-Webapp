@@ -59,7 +59,7 @@ const UserListHeader = (props) => {
 
     const classes = useStyles();
     
-    const   state_displayTypeSummary    = useSelector(state => state.dataDisplaytObject.displayTypeSummary),
+    const   state_displayTypeSummary    = useSelector(state => state.dataDisplayObject.displayTypeSummary),
             dispatch                    = useDispatch(),
             setDataDisplayProps         = (props) => dispatch(dataDisplayProps(props));
 

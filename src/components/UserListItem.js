@@ -38,7 +38,7 @@ const UserListItem = (props) => {
     const classes = useStyles();
     
     const   state_user                  = useSelector(state => state.profileObject),
-            state_displayTypeSummary    = useSelector(state => state.dataDisplaytObject.displayTypeSummary),
+            state_displayTypeSummary    = useSelector(state => state.dataDisplayObject.displayTypeSummary),
             dispatch                    = useDispatch(),
             setAdditionalProps          = (props) => dispatch(userAdditionalProps(props)),
             setDataDisplayProps         = (props) => dispatch(dataDisplayProps(props));

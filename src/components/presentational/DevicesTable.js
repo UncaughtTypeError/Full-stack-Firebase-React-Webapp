@@ -55,7 +55,7 @@ const DevicesTable = (props) => {
 
     const { devices, deviceType, devicesNum, state_user, user_googleId, user_edit } = props;
     
-    const state_displayTypeSummary = useSelector(state => state.dataDisplaytObject.displayTypeSummary);
+    const state_displayTypeSummary = useSelector(state => state.dataDisplayObject.displayTypeSummary);
 
     const classes = useStyles();
 
