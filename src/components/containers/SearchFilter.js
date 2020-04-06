@@ -43,7 +43,6 @@ const SearchFilter = (props) => {
     const   [isClear, setIsClear] = useState(false);
 
     const onSearchFilter = (value) => {
-        console.log({value});
 
         setIsClear(false);
 
