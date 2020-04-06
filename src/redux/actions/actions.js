@@ -10,7 +10,8 @@ import {
     HANDLE_LOADING,
     HANDLE_FEEDBACK,
     HANDLE_DISPLAY,
-    HANDLE_SEARCH_FILTER
+    HANDLE_SEARCH_FILTER,
+    STORE_SEARCH_FILTER
 } from './actionTypes';
 
 // User Login & Profile Object
@@ -69,4 +70,9 @@ export const dataDisplayProps = (props) => dispatch => {
 export const handleSearchFilter = (results) => dispatch => {
     console.log('ACTION: Search Filter Results',{results});
     dispatch({ type: HANDLE_SEARCH_FILTER, payload: results });
+}
+
+export const storeSearchFilter = (term) => dispatch => {
+    console.log('ACTION: Search Filter Term',{term});
+    dispatch({ type: STORE_SEARCH_FILTER, payload: term });
 }

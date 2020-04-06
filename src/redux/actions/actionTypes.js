@@ -23,3 +23,4 @@ export const HANDLE_DISPLAY = 'HANDLE_DISPLAY';
 
 // Search Filter Results
 export const HANDLE_SEARCH_FILTER = 'HANDLE_SEARCH_FILTER';
+export const STORE_SEARCH_FILTER = 'STORE_SEARCH_FILTER';
