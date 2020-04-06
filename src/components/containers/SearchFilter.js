@@ -4,7 +4,7 @@ import escapeRegExp from '../../utils/escapeRegExp';
 // Redux
 import { useDispatch } from 'react-redux';
 // Actions
-import { handleSearchFilter } from '../../redux/actions/actions';
+import { handleSearchFilter, storeSearchFilter } from '../../redux/actions/actions';
 // Theme
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -37,7 +37,8 @@ const SearchFilter = (props) => {
     const classes = useStyles();
     
     const   dispatch                = useDispatch(),
-            setSearchFilterResults  = (props) => dispatch(handleSearchFilter(props));
+            setSearchFilterResults  = (props) => dispatch(handleSearchFilter(props)),
+            setSearchFilterTerm     = (term) => dispatch(storeSearchFilter(term));
 
     const   [isClear, setIsClear] = useState(false);
 
@@ -48,25 +49,12 @@ const SearchFilter = (props) => {
 
         const matchArray = userData.filter(user => {
             let regex = new RegExp(escapeRegExp(value), 'gi');
+            
             return user.profile.name.match(regex);
         });
 
-        console.log({matchArray});
         setSearchFilterResults(matchArray);
-
-        // const html = matchArray.map(htmlElement => {
-    
-        //     const   regex = new RegExp(escapeRegExp(value), 'gi'),
-        //             name = htmlElement.element.replace(regex, `<span class="u-highlight">${value.toLowerCase()}</span>`),
-        //             obsolete = htmlElement.obsolete,
-        //             styles = getStyles(htmlElement),
-        //             description = getMeta(htmlElement),
-        //             result = renderResult({name, description, styles, obsolete});
-    
-        //     return result;
-    
-        // }).join('');
-        // searchResults.innerHTML = html;
+        setSearchFilterTerm(value);
 
     }
 
@@ -80,7 +68,7 @@ const SearchFilter = (props) => {
 
     return (
         <TextField
-            onKeyDown={e => onSearchFilter(e.target.value)}
+            onKeyUp={e => onSearchFilter(e.target.value)}
             className={classes.search}
             id="user-search"
             placeholder="Search Users..."

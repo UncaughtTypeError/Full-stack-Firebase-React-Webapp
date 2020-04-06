@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 // Components
 import withFirebase from './containers/withFirebase';
 import UserListHeader from './containers/UserListHeader';
@@ -14,11 +14,21 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
 import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 
 const useStyles = makeStyles(theme => ({
     list: {
         width: '100%',
         padding: 0,
+    },
+    text: {
+        padding: '20px 0'
+    },
+    icon: {
+        display: 'block',
+        fontSize: '3em',
+        margin: '20px auto 0 auto',
     },
 }));
 
@@ -47,7 +57,6 @@ const UserList = (props) => {
         } else {
             setUsers(userData);
         }
-        console.log({userData},{users},{state_filteredResults});
 
     },[state_filteredResults, userData]);
 
@@ -64,9 +73,18 @@ const UserList = (props) => {
                                 <UserListHeader userData={userData} />
                                 <Paper elevation={3}>
                                     <List className={classes.list}>
-                                        {users.map(user => (
-                                            <UserListItem user={user} key={user.googleId} id={user.googleId} />
-                                        ))}
+                                        {users.length ? (
+                                            users.map(user => (
+                                                <React.Fragment>
+                                                    <UserListItem user={user} key={user.googleId} id={user.googleId} />
+                                                </React.Fragment>
+                                            ))
+                                        ) : (
+                                            <Typography align="center" variant="h5" className={classes.text}>
+                                                No Results...
+                                                <ErrorOutlineIcon fontSize="large" color="disabled" className={classes.icon} />
+                                            </Typography>
+                                        )}
                                     </List>
                                 </Paper>
                             </React.Fragment>

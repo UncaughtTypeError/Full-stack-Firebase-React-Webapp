@@ -1,4 +1,6 @@
 import React from 'react';
+// Redux
+import { useSelector } from 'react-redux';
 // Theme
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
@@ -20,18 +22,41 @@ const useStyles = makeStyles(theme => ({
         color: theme.palette.action.disabled,
         verticalAlign: 'sub',
         marginLeft: 5,
+    },
+    mark: {
+        background: theme.palette.primary.main,
+        color: 'white',
     }
 }));
 
+const UserName = (props) => {
+
+    const classes = useStyles();
+
+    const state_searchTerm = useSelector(state => state.searchFilterResults.searchTerm);
+
+    const   { name } = props,
+            regex = new RegExp(`(${state_searchTerm})`, 'gi'),
+            parts = name.split(regex);
+
+    return (
+        <React.Fragment>
+            {parts.filter(part => part).map((part, i) => (
+                regex.test(part) ? <mark key={i} className={classes.mark}>{part}</mark> : <span key={i}>{part}</span>
+            ))}
+        </React.Fragment>
+    );
+}
+
 const PrimaryContent = (props) => {
 
-    const   classes = useStyles();
+    const classes = useStyles();
 
     const { name, roles } = props;
 
     return (
         <React.Fragment>
-            {name}
+            <UserName name={name} />
             {(roles.viewerRole === 'admin' && roles.userRole === 'admin') && (
                 <VpnKeyIcon fontSize="small" className={classes.icon} />
             )}
@@ -42,7 +67,7 @@ const PrimaryContent = (props) => {
 const SecondaryContent = (props) => {
 
     const { email } = props;
-    
+
     return (
         <React.Fragment>
             <a href={`mailto:${email}`}>{email}</a>
