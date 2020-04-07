@@ -1,7 +1,7 @@
 import React from 'react';
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
 // Config
-import { CLIENT_ID } from '../config/googleOAuth';
+import { CLIENT_ID } from '../../config/googleOAuth';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 // Actions
@@ -10,7 +10,7 @@ import {
     googleLoginSuccess,
     googleLoginFailure,
     googleLogoutSuccess
-} from '../redux/actions/actions';
+} from '../../redux/actions/actions';
 // Theme
 import Button from '@material-ui/core/Button';
 

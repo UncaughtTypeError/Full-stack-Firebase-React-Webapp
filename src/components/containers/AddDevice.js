@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
 // Components
-import withFirebase from './containers/withFirebase';
-import FieldSet from './presentational/FieldSet';
-import InputTextField from './presentational/InputTextField';
-import InputRadio from './presentational/InputRadio';
-import InputCheckbox from './presentational/InputCheckbox';
-import Users from './presentational/Users';
-import Loading from './presentational/Loading';
-import Error from './presentational/Error';
+import withFirebase from './withFirebase';
+import FieldSet from '../presentational/FieldSet';
+import InputTextField from '../presentational/InputTextField';
+import InputRadio from '../presentational/InputRadio';
+import InputCheckbox from '../presentational/InputCheckbox';
+import Users from '../presentational/Users';
+import Loading from '../presentational/Loading';
+import Error from '../presentational/Error';
 // Utils
-import useFirebaseDataApi from '../utils/hooks/useFirebaseDataApi';
-import writeUserData from '../utils/writeUserData';
-import validateFields from '../utils/validateFields';
+import useFirebaseDataApi from '../../utils/hooks/useFirebaseDataApi';
+import writeUserData from '../../utils/writeUserData';
+import validateFields from '../../utils/validateFields';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 // Actions
-import { alertProps } from '../redux/actions/actions';
+import { alertProps } from '../../redux/actions/actions';
 // Theme
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';

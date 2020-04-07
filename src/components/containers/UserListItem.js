@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 // Components
-import withFirebase from './containers/withFirebase';
-import ListItemProfile from './presentational/ListItemProfile';
-import DevicesTable from './presentational/DevicesTable';
+import withFirebase from './withFirebase';
+import ListItemProfile from '../presentational/ListItemProfile';
+import DevicesTable from '../presentational/DevicesTable';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 // Actions
-import { userAdditionalProps, dataDisplayProps } from '../redux/actions/actions';
+import { userAdditionalProps, dataDisplayProps } from '../../redux/actions/actions';
 // Theme
 import { makeStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';

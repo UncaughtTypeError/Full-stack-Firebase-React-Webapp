@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 // Components
-import withFirebase from './containers/withFirebase';
-import UserListHeader from './containers/UserListHeader';
+import withFirebase from './withFirebase';
+import UserListHeader from './UserListHeader';
 import UserListItem from './UserListItem';
-import Loading from './presentational/Loading';
-import Error from './presentational/Error';
+import Loading from '../presentational/Loading';
+import Error from '../presentational/Error';
 // Utils
-import useFirebaseDataApi from '../utils/hooks/useFirebaseDataApi';
+import useFirebaseDataApi from '../../utils/hooks/useFirebaseDataApi';
 // Redux
 import { useSelector } from 'react-redux';
 // Theme

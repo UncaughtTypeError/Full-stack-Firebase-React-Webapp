@@ -1,7 +1,7 @@
 import React from 'react';
 // Components
-import LoginGoogle from '../LoginGoogle';
-import UserProps from '../UserProps';
+import LoginGoogle from '../containers/LoginGoogle';
+import UserProps from '../containers/UserProps';
 // Theme
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';

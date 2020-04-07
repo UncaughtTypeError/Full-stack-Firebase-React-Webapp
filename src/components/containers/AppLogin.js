@@ -1,6 +1,6 @@
 import React from 'react';
 // Components
-import LoginGoogle from '../LoginGoogle';
+import LoginGoogle from './LoginGoogle';
 import Footer from '../presentational/Footer';
 // Theme
 import { makeStyles } from '@material-ui/core/styles';

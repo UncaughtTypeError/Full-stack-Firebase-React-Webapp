@@ -3,8 +3,8 @@ import React from 'react';
 import Header from '../presentational/Header';
 import Body from '../presentational/Body';
 import Footer from '../presentational/Footer';
-import AddDevice from '../AddDevice';
-import UsersList from '../UsersList';
+import AddDevice from './AddDevice';
+import UsersList from './UsersList';
 import SnackbarAlert from '../presentational/SnackbarAlert';
 
 const AppDashboard = () => {
