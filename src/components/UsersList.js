@@ -75,9 +75,7 @@ const UserList = (props) => {
                                     <List className={classes.list}>
                                         {users.length ? (
                                             users.map(user => (
-                                                <React.Fragment>
-                                                    <UserListItem user={user} key={user.googleId} id={user.googleId} />
-                                                </React.Fragment>
+                                                <UserListItem user={user} key={user.googleId} id={user.googleId} />
                                             ))
                                         ) : (
                                             <Typography align="center" variant="h5" className={classes.text}>

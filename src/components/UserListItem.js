@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
 
 const UserListItem = (props) => {
 
-    const { user } = props;
+    const { user, id } = props;
 
     const classes = useStyles();
     
@@ -73,7 +73,7 @@ const UserListItem = (props) => {
 
     return (
         <React.Fragment>
-            <ListItem key={user.googleId} id={user.googleId}>
+            <ListItem key={id} id={user.googleId}>
                 <Box component="div" style={{ width: '100%' }}>
                     <Box display="flex" alignItems="center">
                         <Box component="div" flexGrow={1}>
