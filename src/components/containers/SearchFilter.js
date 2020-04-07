@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 // Utils
 import escapeRegExp from '../../utils/escapeRegExp';
 // Redux
@@ -40,7 +40,8 @@ const SearchFilter = (props) => {
             setSearchFilterResults  = (props) => dispatch(handleSearchFilter(props)),
             setSearchFilterTerm     = (term) => dispatch(storeSearchFilter(term));
 
-    const   [isClear, setIsClear] = useState(false);
+    const   [isClear, setIsClear] = useState(false),
+            searchField = useRef();
 
     const onSearchFilter = (value) => {
 
@@ -70,6 +71,7 @@ const SearchFilter = (props) => {
 
     const onClear = () => {
         setIsClear(true);
+        searchField.current.value = '';
 
         setSearchFilterResults(null);
         setSearchFilterTerm(null);
@@ -83,7 +85,8 @@ const SearchFilter = (props) => {
             placeholder="Search Users..."
             variant="filled"
             size="small"
-            value={isClear ? '' : null}
+            defaultValue={isClear ? '' : undefined}
+            inputRef={searchField}
             InputProps={{
                 'aria-label': "Search Users...",
                 startAdornment: (
