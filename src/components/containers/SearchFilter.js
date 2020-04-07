@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 // Utils
 import escapeRegExp from '../../utils/escapeRegExp';
 // Redux
@@ -46,24 +46,34 @@ const SearchFilter = (props) => {
 
         setIsClear(false);
 
-        const matchArray = userData.filter(user => {
-            let regex = new RegExp(escapeRegExp(value), 'gi');
-            
-            return user.profile.name.match(regex);
-        });
+        value = value.replace( /\s/g, '');
 
-        setSearchFilterResults(matchArray);
-        setSearchFilterTerm(value);
+        let matchArray,
+            regex = new RegExp(escapeRegExp(value), 'gi');
 
+        if(value.length) {
+
+            matchArray = userData.filter(user => {
+                return user.profile.name.match(regex);
+            })
+
+            setSearchFilterResults(matchArray);
+            setSearchFilterTerm(value);
+
+        } else {
+
+            setSearchFilterResults(null);
+            setSearchFilterTerm(null);
+
+        }
     }
 
     const onClear = () => {
         setIsClear(true);
+
+        setSearchFilterResults(null);
+        setSearchFilterTerm(null);
     };
-
-    useEffect(() => {
-
-    }, []);
 
     return (
         <TextField
