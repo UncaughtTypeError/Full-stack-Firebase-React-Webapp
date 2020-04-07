@@ -1,4 +1,6 @@
 import React from 'react';
+// Assets
+import Logo from '../../assets/Web-SEO-Online-Logo-white-transparent.png'
 // Components
 import LoginGoogle from '../containers/LoginGoogle';
 import UserProps from '../containers/UserProps';
@@ -93,7 +95,7 @@ const Header = (props) => {
                         <Box display="flex" alignItems="center" style={{ width: '100%' }}>
                             <Box display="flex" alignItems="center" flexGrow={1}>
                                 <img 
-                                    src="https://webseo.co.za/wp-content/uploads/2017/06/Web-SEO-Online-Logo-white-transparent-ver-2.png" 
+                                    src={Logo}
                                     alt="WebSEO Online Devices"
                                     className={classes.logo} 
                                 />
