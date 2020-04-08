@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 // Actions
 import { alertProps } from '../../redux/actions/actions';
 // Theme
+import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
@@ -18,12 +19,45 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import UpdateIcon from '@material-ui/icons/Update';
 import CheckIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
+// Responsiveness
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const useStyles = makeStyles(theme => ({
     icon: {
         color: theme.palette.action.disabled,
         verticalAlign: 'bottom',
         marginRight: 5,
+    },
+    tableRow: {
+        [theme.breakpoints.down(450)]: { // max-width: 450px
+            '& .MuiTableCell-body': {
+                flexDirection: 'column',
+                alignItems: 'end',
+                textAlign: 'left',
+            },
+        },
+    },
+    tableRowFlex: { // max-width: 960px || max-width: 750px
+        display: 'flex',
+        flexWrap: 'wrap',
+        '& .MuiTableCell-body': {
+            flex: '1 1 100%',
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            flexDirection: 'row',
+            alignItems: 'center',
+            padding: theme.spacing(1, 2),
+        },
+        '&:not(:first-child) .MuiTableCell-body:first-child': {
+            borderTop: '2px solid rgba(224, 224, 224, 1)',
+        },
+        '& .MuiTableCell-body > strong': {
+            marginRight: theme.spacing(2),
+        },
+        '& .MuiTableCell-body > label': {
+            marginRight: 0,
+        },
     },
     tableEmptyColumn: {
         padding: '0 !important',
@@ -32,13 +66,39 @@ const useStyles = makeStyles(theme => ({
         width: '10%',
         minWidth: 150,
     },
+    buttonGroup: {
+        width: '100%',
+        [theme.breakpoints.down(500)]: { // max-width: 500px
+            '& > button': {
+                flex: '1 1 50%',
+            },
+        },
+        [theme.breakpoints.down(350)]: { // max-width: 350px
+            flexWrap: 'wrap',
+            '& > button': {
+                flex: '1 1 100%',
+                margin: 'auto',
+                borderRadius: '4px !important',
+                border: '1px solid rgba(0, 0, 0, 0.23) !important',
+            },
+            '& > button:first-of-type': {
+                marginBottom: theme.spacing(2),
+            },
+        },
+    },
 }));
 
 const DeviceTableRow = (props) => {
 
-    const { firebase, device, deviceType, state_user, user_googleId, user_edit } = props;
+    const   { firebase, device, deviceType, state_user, user_googleId, user_edit } = props,
+            label_makeModel = 'Make / Model',
+            label_serialNo = 'Serial No.',
+            label_takenHome = 'Taken Home?',
+            label_screenSize = 'Screen Size';
 
-    const classes = useStyles();
+    const   isBreakpoint_960 = useMediaQuery('(max-width:960px)'),
+            isBreakpoint_750 = useMediaQuery('(max-width:750px)'),
+            classes = useStyles();
 
     const   dispatch      = useDispatch(),
             setAlertProps = (props) => dispatch(alertProps(props));
@@ -108,7 +168,12 @@ const DeviceTableRow = (props) => {
     };
 
     return (
-        <TableRow key={device.id} id={device.id}>
+        <TableRow key={device.id} id={device.id} className={
+            clsx(
+                classes.tableRow, 
+                ((isBreakpoint_960 && (user_googleId === user_edit)) || isBreakpoint_750) && classes.tableRowFlex
+            )
+        }>
             {( state_user.dataEdit && 
                 (user_googleId === user_edit) && 
                 (user_googleId === state_user.googleId || state_user.role === 'admin') ) ? (
@@ -151,6 +216,9 @@ const DeviceTableRow = (props) => {
                     </TableCell>
                     {deviceType === 'laptops' && (
                         <TableCell align="right">
+                            {isBreakpoint_960 && (
+                                <strong>{label_takenHome}:</strong> 
+                            )}
                             <InputCheckbox 
                                 defaultValue={device.takenHome} 
                                 dataKey='takenHome' 
@@ -192,7 +260,7 @@ const DeviceTableRow = (props) => {
                         </TableCell>
                     )}
                     <TableCell align="right" className={classes.tableActionColumn}>
-                        <ButtonGroup variant="outlined">
+                        <ButtonGroup variant="outlined" className={classes.buttonGroup}>
                             <Button onClick={() => onUpdate(user_googleId, device.id, deviceType)} disabled={isDisabled}>
                                 <UpdateIcon fontSize="small" className={classes.icon} /> Update
                             </Button>
@@ -204,19 +272,37 @@ const DeviceTableRow = (props) => {
                 </React.Fragment>
             ) : (
                 <React.Fragment>
-                    <TableCell align="left">{device.makeModel}</TableCell>
-                    <TableCell align="right">{device.serialNo}</TableCell>
+                    <TableCell align="left">
+                        {isBreakpoint_750 && (
+                            <strong>{label_makeModel}:</strong> 
+                        )}
+                        <span>{device.makeModel}</span>
+                    </TableCell>
+                    <TableCell align="right">
+                        {isBreakpoint_750 && (
+                            <strong>{label_serialNo}:</strong> 
+                        )}
+                        <span>{device.serialNo}</span>
+                    </TableCell>
                     {deviceType === 'laptops' && (
                         <TableCell align="right">
+                            {isBreakpoint_750 && (
+                                <strong>{label_takenHome}:</strong> 
+                            )}
                             {device.takenHome ? (
-                                <CheckIcon className={classes.icon} />
+                                <span><CheckIcon className={classes.icon} /></span>
                             ) : (
-                                <ClearIcon className={classes.icon} />
+                                <span><ClearIcon className={classes.icon} /></span>
                             )}
                         </TableCell>
                     )}
                     {deviceType === 'monitors' && (
-                        <TableCell align="right">{device.screenSize}</TableCell>
+                        <TableCell align="right">
+                            {isBreakpoint_750 && (
+                                <strong>{label_screenSize}:</strong> 
+                            )}
+                            <span>{device.screenSize}</span>
+                        </TableCell>
                     )}
                     <TableCell align="right" className={classes.tableEmptyColumn}></TableCell>
                 </React.Fragment>

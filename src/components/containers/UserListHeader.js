@@ -20,14 +20,30 @@ import DesktopWindowsIcon from '@material-ui/icons/DesktopWindows';
 const useStyles = makeStyles(theme => ({
     root: {
         marginBottom: 5,
+        [theme.breakpoints.down(700)]: { // max-width: 700px
+            '& > div': {
+                flex: '1 1 100%',
+            },
+        },
     },
     icon: {
         color: theme.palette.action.disabled,
         verticalAlign: 'bottom',
         marginLeft: 5,
+        [theme.breakpoints.down(850)]: { // max-width: 850px
+            marginLeft: 0,
+        },
     },
     chip: {
         marginRight: theme.spacing(1),
+        [theme.breakpoints.down(850)]: { // max-width: 850px
+            '& > .MuiChip-label': {
+                fontSize: 0,
+            },
+        },
+        [theme.breakpoints.down(350)]: { // max-width: 350px
+            display: 'none',
+        },
     },
     badge: {
         marginRight: 0,
@@ -37,20 +53,6 @@ const useStyles = makeStyles(theme => ({
             background: '#9c9c9c',
         }
     },
-    search: {
-        marginLeft: theme.spacing(2),
-        '& input': {
-            width: '20ch',
-            transition: '.3s',
-            paddingTop: theme.spacing(1),
-        },
-        '& input:focus': {
-            width: '25ch',
-        }
-    },
-    searchIcon: {
-        marginTop: '0 !important',
-    }
 }));
 
 const UserListHeader = (props) => {

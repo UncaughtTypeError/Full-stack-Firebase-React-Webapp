@@ -2,6 +2,8 @@ import React from 'react';
 // Components
 import LoginGoogle from './LoginGoogle';
 import Footer from '../presentational/Footer';
+// Assets
+import Logo from '../../assets/Web-SEO-Online-Logo-white-transparent.png'
 // Theme
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -40,11 +42,11 @@ const AppLogin = () => {
     return (
         <React.Fragment>
             <Grid className={classes.gridContainer} container alignItems="center" justify="center">
-                <Grid item xs={2}>
+                <Grid item xs={8} sm={5} md={4} lg={3} xl={2}>
                     <Card className={classes.card}>
                         <CardMedia
                             className={classes.logo}
-                            image="https://webseo.co.za/wp-content/uploads/2017/06/Web-SEO-Online-Logo-white-transparent-ver-2.png"
+                            image={Logo}
                             title="WebSEO Online Devices"
                         />
                         <CardContent>

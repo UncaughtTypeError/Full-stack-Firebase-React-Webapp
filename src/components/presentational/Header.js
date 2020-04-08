@@ -18,6 +18,28 @@ import Fab from '@material-ui/core/Fab';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
 const useStyles = makeStyles(theme => ({
+    boxWrapper: {
+        width: '100%',
+        [theme.breakpoints.down(400)]: { // max-width: 350px
+            justifyContent: 'space-between',
+            flexWrap: 'nowrap',
+        },
+    },
+    boxLogo: {
+        [theme.breakpoints.down('xs')]: { // max-width: 600px
+            justifyContent: 'space-between',
+            '& > .MuiTypography-root': {
+                display: 'none',
+            },
+        },
+        [theme.breakpoints.down(350)]: { // max-width: 350px
+            flex: '0 0 30%',
+            '& > img': {
+                width: '100%',
+                height: 'auto',
+            },
+        },
+    },
     logo: {
         width: 'auto',
         height: 50,
@@ -92,8 +114,8 @@ const Header = (props) => {
             <HideOnScroll {...props}>
                 <AppBar color="primary">
                     <Toolbar>
-                        <Box display="flex" alignItems="center" style={{ width: '100%' }}>
-                            <Box display="flex" alignItems="center" flexGrow={1}>
+                        <Box display="flex" flexWrap="wrap" alignItems="center" className={classes.boxWrapper}>
+                            <Box display="flex" alignItems="center" flexGrow={1} className={classes.boxLogo}>
                                 <img 
                                     src={Logo}
                                     alt="WebSEO Online Devices"
@@ -101,7 +123,7 @@ const Header = (props) => {
                                 />
                                 <Typography className={classes.typography} variant="h6">WebSEO Online Devices</Typography>
                             </Box>
-                            <Box display="flex" alignItems="center">
+                            <Box display="flex" alignItems="center" className={classes.boxUser}>
                                 <UserProps />
                                 <LoginGoogle/>
                             </Box>

@@ -16,6 +16,16 @@ import ComputerIcon from '@material-ui/icons/Computer';
 import DesktopWindowsIcon from '@material-ui/icons/DesktopWindows';
 
 const useStyles = makeStyles(theme => ({
+    profileDetails: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        [theme.breakpoints.down(500)]: { // max-width: 500px
+            '& > span:first-child': {
+                flex: '1 1 100%',
+                marginBottom: theme.spacing(1),
+            },
+        },
+    },
     icon: {
         color: theme.palette.action.disabled,
         verticalAlign: 'sub',
@@ -28,7 +38,11 @@ const useStyles = makeStyles(theme => ({
             minWidth: 15,
             width: 15,
             height: 15,
-        }
+        },
+        [theme.breakpoints.down(500)]: { // max-width: 500px
+            marginLeft: 0,
+            marginRight: theme.spacing(1),
+        },
     }
 }));
 
@@ -59,6 +73,7 @@ const Users = (props) => {
                 onClick={onClick}
                 dense 
                 button
+                className={classes.listItem}
             >
                 <ListItemAvatar>
                     <Avatar alt={user.profile.name} src={user.profile.imageUrl} />
@@ -83,8 +98,9 @@ const Users = (props) => {
                             component="span"
                             variant="body2"
                             color="textPrimary"
+                            className={classes.profileDetails}
                         >
-                            {user.profile.email}
+                            <span>{user.profile.email}</span>
                             {(devicesNum.laptopsNum > 0) && (
                                 <Badge className={classes.badge} badgeContent={devicesNum.laptopsNum} color="secondary">
                                     <ComputerIcon fontSize="small" className={classes.icon} />

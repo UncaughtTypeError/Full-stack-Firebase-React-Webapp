@@ -47,6 +47,25 @@ const useStyles = makeStyles(theme => ({
     },
     buttonGroup: {
         width: '100%',
+        [theme.breakpoints.down(500)]: { // max-width: 500px
+            '& > button': {
+                flex: '1 1 50%',
+            },
+        },
+        [theme.breakpoints.down(350)]: { // max-width: 350px
+            flexWrap: 'wrap',
+            '& > button': {
+                flex: '1 1 100%',
+                margin: 'auto',
+                borderRadius: '4px !important',
+            },
+            '& > button:disabled': {
+                border: '1px solid rgba(0, 0, 0, 0.12)',
+            },
+            '& > button:first-of-type': {
+                marginBottom: theme.spacing(2),
+            },
+        },
     },
     fieldSet: {
         marginTop: theme.spacing(2),
@@ -57,9 +76,21 @@ const useStyles = makeStyles(theme => ({
         },
     },
     fieldWrap: {
-        '& > div:not(:last-child)': {
-            padding: theme.spacing(0, 2, 0, 0),
-        }
+        [theme.breakpoints.up(750)]: { // min-width: 750px
+            '& > div:not(:last-child)': {
+                padding: theme.spacing(0, 2, 0, 0),
+            },
+        },
+        [theme.breakpoints.down(750)]: { // max-width: 750px
+            '& > div': {
+                flex: '1 1 100%',
+                padding: theme.spacing(0),
+                marginBottom: theme.spacing(2),
+            },
+            '& > div:last-child label': {
+                marginLeft: theme.spacing(0),
+            },
+        },
     },
     icon: {
         color: theme.palette.action.disabled,
@@ -202,7 +233,7 @@ const AddItem = (props) => {
                 </FieldSet>
                 { deviceType === 'laptops' && (
                     <FieldSet legend="Add new laptop" className={classes.fieldSet}>
-                        <Box display="flex" alignItems="center" component="div" className={classes.fieldWrap}>
+                        <Box display="flex" flexWrap="wrap" alignItems="center" component="div" className={classes.fieldWrap}>
                             <Box flexGrow={1}>
                                 <InputTextField 
                                     placeholder='Make / Model'
@@ -263,7 +294,7 @@ const AddItem = (props) => {
                 )}
                 {deviceType === 'monitors' && (
                     <FieldSet legend="Add new monitor" className={classes.fieldSet}>
-                        <Box display="flex" alignItems="center" component="div" className={classes.fieldWrap}>
+                        <Box display="flex" flexWrap="wrap" alignItems="center" component="div" className={classes.fieldWrap}>
                             <Box flexGrow={1}>
                                 <InputTextField 
                                     placeholder='Make / Model'

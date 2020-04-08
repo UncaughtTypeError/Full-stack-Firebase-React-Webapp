@@ -12,6 +12,8 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import ClearIcon from '@material-ui/icons/Clear';
+// Responsiveness
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const useStyles = makeStyles(theme => ({
     search: {
@@ -23,7 +25,18 @@ const useStyles = makeStyles(theme => ({
         },
         '& input:focus': {
             width: '25ch',
-        }
+        },
+        [theme.breakpoints.down(700)]: { // max-width: 700px
+            width: '100%',
+            margin: theme.spacing(1, 0),
+            '& input': {
+                width: '100%',
+                padding: theme.spacing(2, 0),
+            },
+            '& input:focus': {
+                width: '100%',
+            },
+        },
     },
     searchIcon: {
         marginTop: '0 !important',
@@ -34,7 +47,8 @@ const SearchFilter = (props) => {
 
     const { userData } = props;
 
-    const classes = useStyles();
+    const   isBreakpoint = useMediaQuery('(max-width:600px)'),
+            classes = useStyles();
     
     const   dispatch                = useDispatch(),
             setSearchFilterResults  = (props) => dispatch(handleSearchFilter(props)),
@@ -84,7 +98,7 @@ const SearchFilter = (props) => {
             id="user-search"
             placeholder="Search Users..."
             variant="filled"
-            size="small"
+            size={ isBreakpoint ? "medium" : "small" }
             defaultValue={isClear ? '' : undefined}
             inputRef={searchField}
             InputProps={{

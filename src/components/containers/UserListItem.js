@@ -21,6 +21,24 @@ import DesktopWindowsIcon from '@material-ui/icons/DesktopWindows';
 import Divider from '@material-ui/core/Divider';
 
 const useStyles = makeStyles(theme => ({
+    listHeader: {
+        [theme.breakpoints.down(600)]: { // max-width: 600px
+            '& > div': {
+                flex: '1 1 100%',
+            },
+            '& > div:last-child': {
+                display: 'flex',
+                alignItems: 'center',
+                margin: theme.spacing(1, 0),
+                padding: theme.spacing(2, 0),
+                borderTop: '1px solid rgba(224, 224, 224, 1)',
+            },
+            '& > div:last-child > button': {
+                flex: '1 1 100%',
+                marginLeft: theme.spacing(2),
+            },
+        },
+    },
     icon: {
         color: theme.palette.action.disabled,
         verticalAlign: 'bottom',
@@ -75,7 +93,7 @@ const UserListItem = (props) => {
         <React.Fragment>
             <ListItem key={id} id={user.googleId}>
                 <Box component="div" style={{ width: '100%' }}>
-                    <Box display="flex" alignItems="center">
+                    <Box display="flex" flexWrap="wrap" alignItems="center" className={classes.listHeader}>
                         <Box component="div" flexGrow={1}>
                             <ListItemProfile profile={user.profile} roles={{ viewerRole: state_user.role, userRole: user.role }} />
                         </Box>

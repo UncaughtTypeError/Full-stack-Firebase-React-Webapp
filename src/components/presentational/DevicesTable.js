@@ -4,6 +4,7 @@ import DeviceTableRow from './DeviceTableRow';
 // Redux
 import { useSelector } from 'react-redux';
 // Theme
+import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -16,16 +17,35 @@ import Typography from '@material-ui/core/Typography';
 import Badge from '@material-ui/core/Badge';
 import ComputerIcon from '@material-ui/icons/Computer';
 import DesktopWindowsIcon from '@material-ui/icons/DesktopWindows';
+// Responsiveness
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const useStyles = makeStyles(theme => ({
     table: {
         minWidth: 650,
+        [theme.breakpoints.down(750)]: { // max-width: 750px
+            minWidth: '100%',
+        },
     },
     tableContainer: {
         marginBottom: 10,
     },
+    tableHeaderWrap: {
+    },
+    tableHeaderWrapFlex: { // max-width: 960px || max-width: 750px
+        '& > tr': {
+            justifyContent: 'space-between',
+            display: 'flex',
+        },
+        '& > tr:last-child:not([class*="tableHeader"])': {
+            display: 'none',
+        }
+    },
     tableHeader: {
         backgroundColor: theme.palette.action.selected,
+        [theme.breakpoints.down(750)]: { // max-width: 750px
+            justifyContent: 'space-between',
+        },
     },
     tableLeadColumn: {
         minWidth: 300,
@@ -57,12 +77,19 @@ const DevicesTable = (props) => {
     
     const state_displayTypeSummary = useSelector(state => state.dataDisplayObject.displayTypeSummary);
 
-    const classes = useStyles();
+    const   isBreakpoint_960 = useMediaQuery('(max-width:960px)'),
+            isBreakpoint_750 = useMediaQuery('(max-width:750px)'),
+            classes = useStyles();
 
     return (
         <TableContainer className={classes.tableContainer} component={Paper}>
             <Table className={classes.table} size="small" aria-label="simple table">
-                <TableHead>
+                <TableHead className={
+                    clsx(
+                        classes.tableHeaderWrap, 
+                        ((isBreakpoint_960 && (user_googleId === user_edit)) || isBreakpoint_750) && classes.tableHeaderWrapFlex
+                    )
+                }>
                     {deviceType === 'laptops' && (
                         <React.Fragment>
                             <TableRow className={classes.tableHeader}>
