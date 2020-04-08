@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.js": "/static/js/main.fce71dce.chunk.js",
+    "main.js.map": "/static/js/main.fce71dce.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.cce5275e.js",
+    "runtime-main.js.map": "/static/js/runtime-main.cce5275e.js.map",
+    "static/js/2.1b86f78b.chunk.js": "/static/js/2.1b86f78b.chunk.js",
+    "static/js/2.1b86f78b.chunk.js.map": "/static/js/2.1b86f78b.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.d6c15c3cb37762aaa0c188aabcc4a3cc.js": "/precache-manifest.d6c15c3cb37762aaa0c188aabcc4a3cc.js",
+    "service-worker.js": "/service-worker.js",
+    "static/js/2.1b86f78b.chunk.js.LICENSE.txt": "/static/js/2.1b86f78b.chunk.js.LICENSE.txt",
+    "static/media/Web-SEO-Online-Logo-white-transparent.png": "/static/media/Web-SEO-Online-Logo-white-transparent.7cb63763.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.cce5275e.js",
+    "static/js/2.1b86f78b.chunk.js",
+    "static/js/main.fce71dce.chunk.js"
+  ]
+}
