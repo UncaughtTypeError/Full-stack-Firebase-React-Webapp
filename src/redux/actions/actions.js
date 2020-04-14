@@ -3,9 +3,7 @@ import {
     LOG_IN_FAILURE, 
     LOG_IN_SUCCESS, 
     LOG_OUT_SUCCESS,
-    SET_PROFILE,
     SET_USER_PROPS,
-    UNSET_PROFILE,
     SET_DEVICE_PROPS,
     HANDLE_LOADING,
     HANDLE_FEEDBACK,
@@ -23,7 +21,6 @@ export const googleLoginRequest = () => dispatch => {
 export const googleLoginSuccess = (response) => dispatch => {
     console.log('ACTION: Login Success',{response});
     dispatch({ type: LOG_IN_SUCCESS, payload: response });
-    dispatch({ type: SET_PROFILE, payload: response });
 }
 
 export const googleLoginFailure = (error) => dispatch => {
@@ -34,7 +31,6 @@ export const googleLoginFailure = (error) => dispatch => {
 export const googleLogoutSuccess = () => dispatch => {
     console.log('ACTION: Logout Success');
     dispatch({ type: LOG_OUT_SUCCESS });
-    dispatch({ type: UNSET_PROFILE });
 }
 
 export const userAdditionalProps = (props) => dispatch => {
