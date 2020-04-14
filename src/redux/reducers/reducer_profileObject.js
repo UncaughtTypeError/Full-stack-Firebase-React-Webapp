@@ -1,7 +1,7 @@
 import { 
-    SET_PROFILE,
     SET_USER_PROPS,
-    UNSET_PROFILE 
+    LOG_IN_SUCCESS,
+    LOG_OUT_SUCCESS
 } from '../actions/actionTypes';
 
 const initialProfileObjectState = {
@@ -30,7 +30,7 @@ const profileObjectConstructor = (payload) => {
 
 export default function( state = initialProfileObjectState, action = {} ) {
     switch(action.type) {
-        case SET_PROFILE: {
+        case LOG_IN_SUCCESS: {
             const profileObject = profileObjectConstructor(action.payload);
             return { ...state, ...profileObject }
         }
@@ -38,7 +38,7 @@ export default function( state = initialProfileObjectState, action = {} ) {
             const userPropsObject = action.payload;
             return { ...state, ...userPropsObject }
         }
-        case UNSET_PROFILE: {
+        case LOG_OUT_SUCCESS: {
             return { ...state, ...initialProfileObjectState }
         }
         default:
