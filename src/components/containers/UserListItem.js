@@ -91,72 +91,76 @@ const UserListItem = (props) => {
 
     return (
         <React.Fragment>
-            <ListItem key={id} id={user.googleId}>
-                <Box component="div" style={{ width: '100%' }}>
-                    <Box display="flex" flexWrap="wrap" alignItems="center" className={classes.listHeader}>
-                        <Box component="div" flexGrow={1}>
-                            <ListItemProfile profile={user.profile} roles={{ viewerRole: state_user.role, userRole: user.role }} />
-                        </Box>
-                        <Box component="div">
-                            {(devicesNum.laptopsNum > 0) && (
-                                <Badge className={classes.badge} badgeContent={devicesNum.laptopsNum} color="secondary">
-                                    <ComputerIcon className={classes.icon} />
-                                </Badge>
-                            )}
-                            {(devicesNum.monitorsNum > 0) && (
-                                <Badge className={classes.badge} badgeContent={devicesNum.monitorsNum} color="secondary">
-                                    <DesktopWindowsIcon className={classes.icon} />
-                                </Badge>
-                            )}
-                            {(user.devices.laptops.length > 0 || user.devices.monitors.length > 0) && (
-                                // can the current user edit?
-                                user.googleId === state_user.googleId || state_user.role === 'admin') && (
-                                    // is the current user editing?
-                                    state_user.dataEdit && (user.googleId === userEdit) ? (
-                                        <Button variant="contained" onClick={() => onUserEdit(false)}>
-                                            <ClearIcon fontSize="small" className={classes.icon} /> Done
-                                        </Button>
+            {(devicesNum.laptopsNum > 0 || devicesNum.monitorsNum > 0) && (
+                <React.Fragment>
+                    <ListItem key={id} id={user.googleId}>
+                        <Box component="div" style={{ width: '100%' }}>
+                            <Box display="flex" flexWrap="wrap" alignItems="center" className={classes.listHeader}>
+                                <Box component="div" flexGrow={1}>
+                                    <ListItemProfile profile={user.profile} roles={{ viewerRole: state_user.role, userRole: user.role }} />
+                                </Box>
+                                <Box component="div">
+                                    {(devicesNum.laptopsNum > 0) && (
+                                        <Badge className={classes.badge} badgeContent={devicesNum.laptopsNum} color="secondary">
+                                            <ComputerIcon className={classes.icon} />
+                                        </Badge>
+                                    )}
+                                    {(devicesNum.monitorsNum > 0) && (
+                                        <Badge className={classes.badge} badgeContent={devicesNum.monitorsNum} color="secondary">
+                                            <DesktopWindowsIcon className={classes.icon} />
+                                        </Badge>
+                                    )}
+                                    {(user.devices.laptops.length > 0 || user.devices.monitors.length > 0) && (
+                                        // can the current user edit?
+                                        user.googleId === state_user.googleId || state_user.role === 'admin') && (
+                                            // is the current user editing?
+                                            state_user.dataEdit && (user.googleId === userEdit) ? (
+                                                <Button variant="contained" onClick={() => onUserEdit(false)}>
+                                                    <ClearIcon fontSize="small" className={classes.icon} /> Done
+                                                </Button>
+                                            ) : (
+                                                <Button variant="outlined" onClick={() => onUserEdit(true, user.googleId)}>
+                                                    <UpdateIcon fontSize="small" className={classes.icon} /> Update
+                                                </Button>
+                                            )
+                                    )}
+                                </Box>
+                            </Box>
+                            <div className='devices'>
+                                <div className='devices_laptops'>
+                                    {user.devices.laptops.length ? (
+                                        <DevicesTable 
+                                            devices={user.devices.laptops} 
+                                            deviceType='laptops'
+                                            devicesNum={devicesNum.laptopsNum}
+                                            state_user={state_user} 
+                                            user_edit={userEdit} 
+                                            user_googleId={user.googleId} 
+                                        />
                                     ) : (
-                                        <Button variant="outlined" onClick={() => onUserEdit(true, user.googleId)}>
-                                            <UpdateIcon fontSize="small" className={classes.icon} /> Update
-                                        </Button>
-                                    )
-                            )}
+                                        <Typography component="div">No Laptops found...</Typography>
+                                    )}
+                                </div>
+                                <div className='devices_monitors'>
+                                    {user.devices.monitors.length ? (
+                                        <DevicesTable 
+                                            devices={user.devices.monitors} 
+                                            deviceType='monitors'
+                                            devicesNum={devicesNum.monitorsNum}
+                                            state_user={state_user} 
+                                            user_edit={userEdit} 
+                                            user_googleId={user.googleId} 
+                                        />
+                                    ) : (
+                                        <Typography component="div">No Monitors found...</Typography>
+                                    )}
+                                </div>
+                            </div>
                         </Box>
-                    </Box>
-                    <div className='devices'>
-                        <div className='devices_laptops'>
-                            {user.devices.laptops.length ? (
-                                <DevicesTable 
-                                    devices={user.devices.laptops} 
-                                    deviceType='laptops'
-                                    devicesNum={devicesNum.laptopsNum}
-                                    state_user={state_user} 
-                                    user_edit={userEdit} 
-                                    user_googleId={user.googleId} 
-                                />
-                            ) : (
-                                <Typography component="div">No Laptops found...</Typography>
-                            )}
-                        </div>
-                        <div className='devices_monitors'>
-                            {user.devices.monitors.length ? (
-                                <DevicesTable 
-                                    devices={user.devices.monitors} 
-                                    deviceType='monitors'
-                                    devicesNum={devicesNum.monitorsNum}
-                                    state_user={state_user} 
-                                    user_edit={userEdit} 
-                                    user_googleId={user.googleId} 
-                                />
-                            ) : (
-                                <Typography component="div">No Monitors found...</Typography>
-                            )}
-                        </div>
-                    </div>
-                </Box>
-            </ListItem>
-            <Divider component="li" />
+                    </ListItem>
+                    <Divider component="li" />
+                </React.Fragment>
+            )}
         </React.Fragment>
     );
 
