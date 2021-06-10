@@ -24,7 +24,7 @@ const Footer = () => {
         <AppBar position="fixed" color="primary" className={classes.appBar} component="footer">
             <Toolbar variant="dense">
                 <Typography component="div" gutterBottom align="center" className={classes.typography}>
-                    <small>&copy; WebSEO Online Devices {new Date().getFullYear()}</small>
+                    <small>&copy; Copyright {new Date().getFullYear()}</small>
                 </Typography>
             </Toolbar>
         </AppBar>
